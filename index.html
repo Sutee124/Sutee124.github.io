@@ -133,6 +133,22 @@ nav a:hover::after {
   transform: translateY(-2px);
 }
 
+  .button2 {
+  display: inline-block;
+  padding: 3px 25px;
+  background: #ff3b3b;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.button2:hover {
+  background: #ff0000;
+  text-decoration: underline;
+  transform: translateY(-2px);
+}
+
 /* ===== SECTIONS ===== */
 
 section {
@@ -268,8 +284,10 @@ fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
 <section id="contact">
   <h2>Contact</h2>
   <div class="section-content">
-    Interested in collaboration or feedback? Reach out through my link page.
-    <a href="mailto:sutee1241@outlook.com" target="_blank" class="button">Email</a>
+    <a href="mailto:sutee1241@outlook.com" target="_blank" class="button2">Email</a>
+    <a href="javascript:alert('For now, please DM me on discord: @sutee.124');" class="button2">
+  Discord
+</a>
   </div>
 </section>
 
@@ -279,6 +297,7 @@ fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
 
 </body>
 </html>
+
 
 
 
