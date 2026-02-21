@@ -203,6 +203,16 @@ section h2 {
   transform: translateY(-4px);
 }
 
+.publisher-link {
+  color: #ff3b3b;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.publisher-link:hover {
+  text-decoration: underline;
+}
+
 /* ===== FOOTER ===== */
 
 footer {
@@ -237,12 +247,20 @@ footer {
 
 <section id="downloads">
       <div class="downloads-card">
-      <h3>GPU-Z</h3> <h4 href="https://www.techpowerup.com/">By TechPowerUp</h4>
+      <h3>GPU-Z</h3> <h4>
+  By <a href="https://www.techpowerup.com/" target="_blank" class="publisher-link">
+    TechPowerUp
+  </a>
+</h4>
       <p>Version 2.57.0. GPU-Z is a free utility for Windows that shows detailed information about your graphics card. It is portable btw. </p>
       <a href="/apps/GPU-Z.exe" target="_blank" class="button2">Download</a>
     </div>
    <div class="downloads-card">
-      <h3>Windhawk</h3> <h4 href="https://ramensoftware.com/">By Ramen Software</h4>
+      <h3>Windhawk</h3> <h4>
+  By <a href="https://ramensoftware.com/" target="_blank" class="publisher-link">
+    Ramen Software
+  </a>
+</h4>
       <p>Version 1.6.0. Windhawk is a free and open-source Windows customization tool that lets you modify how Windows behaves without permanently patching system files. Think of it as a modern, safer version of old-school Windows tweaking tools.</p>
       <a href="/apps/windhawk_setup.exe" target="_blank" class="button2">Download</a>
     </div>
