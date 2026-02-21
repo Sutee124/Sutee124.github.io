@@ -214,37 +214,6 @@ footer {
 }
 </style>
 </head>
-<script>
-const username = "Sutee124";
-
-fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
-  .then(response => response.json())
-  .then(repos => {
-    const repoContainer = document.getElementById("repo-list");
-
-    repos
-      .filter(repo => !repo.fork) // hide forks
-      .slice(0, 6) // show latest 6 repos
-      .forEach(repo => {
-        const card = document.createElement("div");
-        card.className = "project-card";
-
-        card.innerHTML = `
-          <h3>${repo.name}</h3>
-          <p>${repo.description ? repo.description : "No description provided."}</p>
-          <a href="${repo.html_url}" target="_blank" class="repo-link">View on GitHub ▶</a>
-        `;
-
-        repoContainer.appendChild(card);
-      });
-  })
-  .catch(error => {
-    document.getElementById("repo-list").innerHTML =
-      "<p>Unable to load repositories.</p>";
-    console.error(error);
-  });
-</script>
-
 <body>
 
 <nav>
@@ -259,27 +228,19 @@ fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
 </nav>
 
 <section id="about">
-  <h2>About</h2>
+  <h2>Test</h2>
   <div class="section-content">
- I do random stuffs. Artist, Gaming, Developer, Tech tinkering. Whatever you could've think of. Depends on my mood.
+ This is a test page.
   </div>
 </section>
 
 <section id="projects">
-  <h2>Projects</h2>
-  <div class="projects" id="repo-list">
-    <!-- GitHub repos will load here -->
-  </div>
-</section>
-
-<section id="contact">
-  <h2>Contact</h2>
-  <div class="section-content">
-    <a href="mailto:sutee1241@outlook.com" target="_blank" class="button2">Email</a>
-    <a href="javascript:alert('For now, please DM me on discord: @sutee.124');" class="button2">
-  Discord
-</a>
-  </div>
+  <h2>Test</h2>
+      <div class="project-card">
+      <h3>Download Here</h3>
+      <p>click to download</p>
+      <a href="sutee124.github.io" target="_blank" class="button2">Download</a>
+    </div>
 </section>
 
 <footer>
