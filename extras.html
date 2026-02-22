@@ -120,6 +120,26 @@ nav a:hover::after {
   transform: translateY(-2px);
 }
 
+canvas {
+  border: 2px solid #ff0000;
+  background: #111;
+  cursor: crosshair;
+}
+
+input {
+  width: 70%;
+  padding: 10px;
+  background: #111;
+  border: 2px solid #ff0000;
+  color: #fff;
+  font-family: Imagine, Tahoma, sans-serif;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ff3b3b;
+}
+
 /* ===== SECTIONS ===== */
 
 section {
@@ -179,10 +199,28 @@ footer {
   </ul>
 </nav>
 
-<section id="about">
-  <h2>About</h2>
+<section id="top">
+  <h2>Extras</h2>
   <div class="section-content">
- Test site.
+ Came from my abandoned StrawPage? Here you can draw in the canvas. (like the strawpage picasso gimmicks thing.)
+  </div>
+</section>
+
+<section id="ask">
+  <h2>Ask Me Anything</h2>
+  <div class="section-content">
+    <input type="text" id="questionInput" placeholder="Type your question here..." />
+    <button class="button2" onclick="submitQuestion()">Send</button>
+    <p id="responseMessage" style="margin-top:15px; color:#ff3b3b;"></p>
+  </div>
+</section>
+
+<section id="draw">
+  <h2>Draw Something</h2>
+  <div class="section-content">
+    <canvas id="board" width="800" height="400"></canvas>
+    <br><br>
+    <button class="button2" onclick="clearCanvas()">Clear</button>
   </div>
 </section>
 
@@ -191,5 +229,66 @@ footer {
   © 2026 sutee124.
 </footer>
 
+<script>
+const canvas = document.getElementById("board");
+const ctx = canvas.getContext("2d");
+
+let drawing = false;
+
+canvas.addEventListener("mousedown", () => drawing = true);
+canvas.addEventListener("mouseup", () => drawing = false);
+canvas.addEventListener("mousemove", draw);
+
+function draw(e) {
+  if (!drawing) return;
+
+  ctx.lineWidth = 2;
+  ctx.lineCap = "square";
+  ctx.strokeStyle = "#ff3b3b";
+
+  ctx.lineTo(e.offsetX, e.offsetY);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(e.offsetX, e.offsetY);
+}
+
+function clearCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+</script>
+<script>
+async function submitQuestion() {
+  const input = document.getElementById("questionInput");
+  const message = document.getElementById("responseMessage");
+
+  const question = input.value.trim();
+
+  if (!question) {
+    message.textContent = "Please type something.";
+    return;
+  }
+
+  message.textContent = "Sending...";
+
+  try {
+    const response = await fetch("https://hello.sutee-avp.workers.dev/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ question })
+    });
+
+    if (response.ok) {
+      message.textContent = "Question sent anonymously!";
+      input.value = "";
+    } else {
+      message.textContent = "Something went wrong.";
+    }
+  } catch (err) {
+    message.textContent = "Error sending question.";
+  }
+}
+</script>
 </body>
 </html>
