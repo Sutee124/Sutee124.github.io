@@ -271,15 +271,45 @@ footer {
 
 <script>
 const username = "Sutee124";
+const repoContainer = document.getElementById("repo-list");
+
+/* =========================
+   MANUAL PROJECTS (ADD HERE)
+========================= */
+
+const customProjects = [
+  {
+    name: "Laptop Transformation + Upgrade",
+    description: "A planned project I didn't do yet. May start doing it this April.",
+    url: "javascript:alert('The YouTube video will be uploaded soon, please stay tuned!');"
+  },
+];
+
+/* Render manual projects first */
+customProjects.forEach(project => {
+  const card = document.createElement("div");
+  card.className = "project-card";
+
+  card.innerHTML = `
+    <h3>${project.name}</h3>
+    <p>${project.description}</p>
+    <a href="${project.url}" target="_blank" class="repo-link">View Project ▶</a>
+  `;
+
+  repoContainer.appendChild(card);
+});
+
+/* =========================
+   GITHUB PROJECTS
+========================= */
 
 fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
   .then(response => response.json())
   .then(repos => {
-    const repoContainer = document.getElementById("repo-list");
 
     repos
-      .filter(repo => !repo.fork) // hide forks
-      .slice(0, 6) // show latest 6 repos
+      .filter(repo => !repo.fork)
+      .slice(0, 6)
       .forEach(repo => {
         const card = document.createElement("div");
         card.className = "project-card";
@@ -294,8 +324,6 @@ fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
       });
   })
   .catch(error => {
-    document.getElementById("repo-list").innerHTML =
-      "<p>Unable to load repositories.</p>";
     console.error(error);
   });
 </script>
