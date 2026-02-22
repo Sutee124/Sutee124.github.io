@@ -74,7 +74,21 @@ nav a::after {
 nav a:hover::after {
   width: 100%;
 }
+  .button2 {
+  display: inline-block;
+  padding: 3px 25px;
+  background: #ff3b3b;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s;
+}
 
+.button2:hover {
+  background: #ff0000;
+  text-decoration: underline;
+  transform: translateY(-2px);
+}
 .logo img {
   max-height: 24px;
 }
@@ -100,17 +114,18 @@ nav a:hover::after {
             left: 0px;
             top: 0px;
         }
-        #c1 {
-            position: fixed;
-            left: 0px;
-            top: 0px;
-        }
-        #main {
-            transform-origin: 0px 0px;
-            position: fixed;
-            left: 0px;
-            top: 0px;
-        }
+#c1 {
+    width: 1024px;
+    height: 1024px;
+    display: block;
+}
+#main {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    transform-origin: top center;
+}
         #config {
             position: fixed;
             left: 0px;
@@ -144,7 +159,6 @@ nav a:hover::after {
         <button class="button2" id="cancle">Cancel</button>
     </div>
     <script>
-alert("trigonometric and inverse trigonometric functions test.\ncreated by cznull@bilibili");
     var cx, cy;
     var glposition;
     var glright;
@@ -350,31 +364,22 @@ function ontimer() {
         gl.drawArrays(gl.TRIANGLES, 0, 6);
         gl.finish();
     }
-    window.onresize = function () {
-        cx = document.body.clientWidth;
-        cy = document.body.clientHeight;
-        if(cx>cy){
-            cx=cy;
-        }
-        else{
-            cy=cx;
-        }
-        document.getElementById("main").style.width=1024+"px";
-        document.getElementById("main").style.height=1024+"px";
-        document.getElementById("main").style.transform="scale("+cx/1024+","+cy/1024+")";
-    }
+    function resizeCanvas() {
+    var navbarHeight = document.querySelector("nav").offsetHeight;
+    var availableHeight = window.innerHeight - navbarHeight - 20;
+    var availableWidth = window.innerWidth;
+
+    var size = Math.min(availableWidth * 0.9, availableHeight);
+
+    document.getElementById("main").style.width = size + "px";
+    document.getElementById("main").style.height = size + "px";
+    document.getElementById("main").style.transform = "translateX(-50%) scale(" + size / 1024 + ")";
+}
+
+window.onresize = resizeCanvas;
+ 
     window.onload = function () {
-        cx = document.body.clientWidth;
-        cy = document.body.clientHeight;
-        if(cx>cy){
-            cx=cy;
-        }
-        else{
-            cy=cx;
-        }
-        document.getElementById("main").style.width=1024+"px";
-        document.getElementById("main").style.height=1024+"px";
-        document.getElementById("main").style.transform="scale("+cx/1024+","+cy/1024+")";
+        resizeCanvas();
         var positions = [-1.0, -1.0, 0.0, 1.0, -1.0, 0.0, 1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, -1.0, 1.0, 0.0];
         var VSHADER_SOURCE =
             "#version 100 \n"+
