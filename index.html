@@ -149,6 +149,43 @@ nav a:hover::after {
   transform: translateY(-2px);
 }
 
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: #111;
+  border: 1px solid #ff0000;
+  min-width: 180px;
+
+  display: flex;
+  flex-direction: column;
+
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: 0.25s ease;
+  z-index: 1000;
+}
+
+.dropdown-menu a {
+  padding: 12px 16px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  border-bottom: 1px solid #222;
+}
+
+.dropdown-menu a:hover {
+  background: #1a1a1a;
+}
+
+/* SHOW STATE */
+.dropdown-menu.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
 /* ===== SECTIONS ===== */
 
 section {
@@ -214,6 +251,65 @@ footer {
 }
 </style>
 </head>
+
+<body>
+
+<nav>
+  <a href="" class="logo">
+    <img src="logo.png" alt="Sutee">
+  </a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="downloads">Downloads</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div>
+    <h1>Hey. I'm Sutee.</h1>
+    <p>I do random stuffs.</p>
+    <a href="#" target="_blank" id="linksToggle" clsss="button">My Links</a>
+      <div class="dropdown-menu" id="linksMenu">
+        <a href="https://www.example.com" target="_blank">Example</a>
+        <a href="https://www.reddit.com/user/Sutee124/" target="_blank">Reddit</a>
+        <a href="#" id="discordDropdown">Discord</a>
+      </div>
+    <a href="downloads.html" class="button">Downloads</a>
+  </div>
+</div>
+
+<section id="about">
+  <h2>About</h2>
+  <div class="section-content">
+ I do random stuffs. Web Developer, Tech tinkering. Whatever you could've think of. Depends on my mood.
+  </div>
+  <div class="section-content">
+ I'm actually interested in tech stuffs. Also trying to be a digital artist. Commissions not open.
+  </div>
+</section>
+
+<section id="projects">
+  <h2>Projects</h2>
+  <div class="projects" id="repo-list">
+    <!-- GitHub repos will load here -->
+  </div>
+</section>
+
+<section id="contact">
+  <h2>Contact</h2>
+  <div class="section-content">
+    <a href="mailto:sutee1241@outlook.com" class="button2">Email</a>
+    <a href="javascript:alert('For now, please DM me on discord: @sutee.124');" class="button2">Discord</a>
+    <a href="https://www.reddit.com/user/Sutee124/" target="_blank" class="button2">Reddit</a>
+  </div>
+</section>
+
+<footer>
+  © 2026 sutee124.
+</footer>
+
 <script>
 const username = "Sutee124";
 
@@ -245,56 +341,28 @@ fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
   });
 </script>
 
-<body>
+<script>
+const toggleBtn = document.getElementById("linksToggle");
+const menu = document.getElementById("linksMenu");
+const discordItem = document.getElementById("discordDropdown");
 
-<nav>
-  <a href="sutee124.github.io" class="logo">
-    <img src="logo.png" alt="Sutee">
-  </a>
-  <ul>
-    <li><a href="#about">About</a></li>
-    <li><a href="downloads">Downloads</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+// Toggle dropdown
+toggleBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  menu.classList.toggle("active");
+});
 
-<div class="hero">
-  <div>
-    <h1>Hey. I'm Sutee.</h1>
-    <p>I do random stuffs.</p>
-    <a href="https://sutee124.straw.page" target="_blank" class="button">My Links</a>
-    <a href="downloads.html" class="button">Downloads</a>
-    <a href="https://www.reddit.com/user/Sutee124/" target="_blank" class="button">Reddit</a>
-  </div>
-</div>
+// Close when clicking outside
+document.addEventListener("click", () => {
+  menu.classList.remove("active");
+});
 
-<section id="about">
-  <h2>About</h2>
-  <div class="section-content">
- I do random stuffs. Web Developer, Tech tinkering. Whatever you could've think of. Depends on my mood.
-  </div>
-</section>
-
-<section id="projects">
-  <h2>Projects</h2>
-  <div class="projects" id="repo-list">
-    <!-- GitHub repos will load here -->
-  </div>
-</section>
-
-<section id="contact">
-  <h2>Contact</h2>
-  <div class="section-content">
-    <a href="mailto:sutee1241@outlook.com" class="button2">Email</a>
-    <a href="javascript:alert('For now, please DM me on discord: @sutee.124');" class="button2">Discord</a>
-    <a href="https://www.reddit.com/user/Sutee124/" target="_blank" class="button2">Reddit</a>
-  </div>
-</section>
-
-<footer>
-  © 2026 sutee124.
-</footer>
+// Discord alert
+discordItem.addEventListener("click", (e) => {
+  e.preventDefault();
+  alert("For now, please DM me on discord: @sutee.124");
+});
+</script>
 
 </body>
 </html>
