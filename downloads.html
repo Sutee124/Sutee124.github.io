@@ -256,23 +256,15 @@ section h2 {
   padding: 45px;
   line-height: 1.8;
   border: 1px solid #222;
-  transition: 
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    opacity 0.25s ease;
+  transition:
+    transform 0.35s ease,
+    opacity 0.25s ease,
+    border-color 0.25s ease;
 }
 
-/* For smooth fade-out before removal */
-.downloads-card.fade-out {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-/* Hidden */
-.downloads-card.hide {
-  opacity: 0;
-  transform: translateY(10px);
-  pointer-events: none;
+.downloads-card:hover {
+  border-color: #ff0000;
+  transform: translateY(-4px);
 }
 
 /* Stagger animation when appearing */
@@ -289,11 +281,6 @@ section h2 {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-.downloads-card:hover {
-  border-color: #ff0000;
-  transform: translateY(-4px);
 }
 
 .publisher-link {
@@ -395,34 +382,58 @@ footer {
 
 <script>
 const searchInput = document.getElementById("searchInput");
-const cards = document.querySelectorAll(".downloads-card");
+const cards = Array.from(document.querySelectorAll(".downloads-card"));
 const noResults = document.getElementById("noResults");
 const clearBtn = document.getElementById("clearBtn");
 
 function filterCards() {
   const filter = searchInput.value.toLowerCase();
+
+  // FIRST: record initial positions
+  const firstPositions = new Map();
+  cards.forEach(card => {
+    firstPositions.set(card, card.getBoundingClientRect());
+  });
+
   let visibleCount = 0;
 
+  // Apply filtering
   cards.forEach(card => {
     const text = card.innerText.toLowerCase();
     const matches = text.includes(filter);
 
     if (matches) {
       card.style.display = "block";
-      requestAnimationFrame(() => {
-        card.style.opacity = "1";
-        card.style.transform = "translateY(0)";
-      });
       visibleCount++;
     } else {
-      card.style.opacity = "0";
-      card.style.transform = "translateY(10px)";
-      setTimeout(() => {
-        card.style.display = "none";
-      }, 200);
+      card.style.display = "none";
     }
   });
 
+  // LAST: record new positions
+  const lastPositions = new Map();
+  cards.forEach(card => {
+    if (card.style.display !== "none") {
+      lastPositions.set(card, card.getBoundingClientRect());
+    }
+  });
+
+  // INVERT + PLAY
+  lastPositions.forEach((last, card) => {
+    const first = firstPositions.get(card);
+    const deltaX = first.left - last.left;
+    const deltaY = first.top - last.top;
+
+    if (deltaX || deltaY) {
+      card.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+      requestAnimationFrame(() => {
+        card.style.transform = "";
+      });
+    }
+  });
+
+  // No results
   if (visibleCount === 0 && filter !== "") {
     noResults.classList.add("show");
   } else {
