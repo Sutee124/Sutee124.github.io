@@ -256,15 +256,23 @@ section h2 {
   padding: 45px;
   line-height: 1.8;
   border: 1px solid #222;
-  transition:
-    transform 0.35s ease,
-    opacity 0.25s ease,
-    border-color 0.25s ease;
+  transition: 
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    opacity 0.25s ease;
 }
 
-.downloads-card:hover {
-  border-color: #ff0000;
-  transform: translateY(-4px);
+/* For smooth fade-out before removal */
+.downloads-card.fade-out {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* Hidden */
+.downloads-card.hide {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
 }
 
 /* Stagger animation when appearing */
@@ -281,6 +289,11 @@ section h2 {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+}
+
+.downloads-card:hover {
+  border-color: #ff0000;
+  transform: translateY(-4px);
 }
 
 .publisher-link {
@@ -382,59 +395,34 @@ footer {
 
 <script>
 const searchInput = document.getElementById("searchInput");
-const cards = Array.from(document.querySelectorAll(".downloads-card"));
+const cards = document.querySelectorAll(".downloads-card");
 const noResults = document.getElementById("noResults");
 const clearBtn = document.getElementById("clearBtn");
 
 function filterCards() {
   const filter = searchInput.value.toLowerCase();
-
-  // FIRST: measure initial positions
-  const firstRects = new Map();
-  cards.forEach(card => {
-    if (card.style.display !== "none") {
-      firstRects.set(card, card.getBoundingClientRect());
-    }
-  });
-
   let visibleCount = 0;
 
-  // Apply filtering
   cards.forEach(card => {
-    const matches = card.innerText.toLowerCase().includes(filter);
-    card.style.display = matches ? "block" : "none";
-    if (matches) visibleCount++;
-  });
+    const text = card.innerText.toLowerCase();
+    const matches = text.includes(filter);
 
-  // Force layout recalculation
-  document.body.offsetHeight;
-
-  // LAST: measure new positions
-  const lastRects = new Map();
-  cards.forEach(card => {
-    if (card.style.display !== "none") {
-      lastRects.set(card, card.getBoundingClientRect());
-    }
-  });
-
-  // Animate movement
-  lastRects.forEach((last, card) => {
-    const first = firstRects.get(card);
-    if (!first) return;
-
-    const deltaX = first.left - last.left;
-    const deltaY = first.top - last.top;
-
-    if (deltaX || deltaY) {
-      card.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-
+    if (matches) {
+      card.style.display = "block";
       requestAnimationFrame(() => {
-        card.style.transform = "translate(0, 0)";
+        card.style.opacity = "1";
+        card.style.transform = "translateY(0)";
       });
+      visibleCount++;
+    } else {
+      card.style.opacity = "0";
+      card.style.transform = "translateY(10px)";
+      setTimeout(() => {
+        card.style.display = "none";
+      }, 200);
     }
   });
 
-  // No results handling
   if (visibleCount === 0 && filter !== "") {
     noResults.classList.add("show");
   } else {
