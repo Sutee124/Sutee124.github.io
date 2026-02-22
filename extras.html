@@ -122,6 +122,25 @@ nav a:hover::after {
   transform: translateY(-2px);
 }
 
+  .button3 {
+  display: inline-block;
+  padding: 11px 25px;
+  background: #ff3b3b;
+  color: #fff;
+  text-decoration: none;
+  font-weight: normal;
+  transition: 0.2s;
+  border:none;
+  font-family: Imagine;
+  transform: translateY(-1px)
+}
+
+.button3:hover {
+  background: #ff0000;
+  text-decoration: underline;
+  transform: translateY(-2px);
+}
+
 canvas {
   border: 2px solid #ff0000;
   background: #ffffff;
@@ -247,8 +266,9 @@ footer {
 Here are some random fun stuffs you can do on my site.
   </div>
   <br>
-  <a href="vbsm" class="button">Lag Test</a>
-  <a href="vbsm" class="button">Lag Test</a>
+  <a href="annyg" class="button">Annoying Game</a>
+  <a href="vsbm" class="button">Lag Test</a>
+  <br>
   <br>
   <div class="section-content">
  Came from my abandoned StrawPage? Here you can draw in the canvas. (like the strawpage picasso gimmicks thing.)
@@ -289,7 +309,7 @@ Here are some random fun stuffs you can do on my site.
   <h2>Ask Me Anything Beta</h2>
   <div class="section-content">
     <input type="text" id="questionInput" placeholder="Type your question here..." />
-    <button class="button2" onclick="submitQuestion()">Send</button>
+    <button class="button3" onclick="submitQuestion()">Send</button>
     <p id="responseMessage" style="margin-top:15px; color:#ff3b3b;"></p>
   </div>
 </section>
