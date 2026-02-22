@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>sutee's site</title>
+<title>sutee's extras</title>
 
 <!-- FAVICON -->
 <link rel="icon" type="image/png+xml" href="favicon.png">
@@ -88,35 +88,6 @@ nav a:hover::after {
   max-height: 24px;
 }
 
-/* ===== HERO ===== */
-
-.hero {
-  height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 40px;
-  background: linear-gradient(to bottom, #000, #111);
-}
-
-.hero h1 {
-  font-size: 36px;
-  color: #ff3b3b;
-  margin-bottom: 20px;
-  animation: glowPulse 3s infinite ease-in-out;
-}
-
-@keyframes glowPulse {
-  0% { text-shadow: 0 0 5px rgba(255,0,0,0.3); }
-  50% { text-shadow: 0 0 15px rgba(255,0,0,0.6); }
-  100% { text-shadow: 0 0 5px rgba(255,0,0,0.3); }
-}
-
-.hero p {
-  opacity: 0.8;
-  margin-bottom: 25px;
-}
 
 .button {
   display: inline-block;
@@ -181,27 +152,6 @@ section h2 {
   opacity: 0.85;
 }
 
-/* ===== PROJECT GRID ===== */
-
-.projects {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 30px;
-}
-
-.project-card {
-  background: #111;
-  padding: 20px;
-  border: 1px solid #222;
-  transition: 0.25s ease;
-}
-
-.project-card:hover {
-  border-color: #ff0000;
-  transform: translateY(-4px);
-}
-
 /* ===== FOOTER ===== */
 
 footer {
@@ -229,75 +179,17 @@ footer {
   </ul>
 </nav>
 
-<div class="hero">
-  <div>
-    <h1>Hey. I'm Sutee.</h1>
-    <p>I do random stuffs.</p>
-    <a href="https://github.com/Sutee124" target="_blank" class="button">GitHub</a>
-    <a href="downloads" class="button">Downloads</a>
-  </div>
-</div>
-
 <section id="about">
   <h2>About</h2>
   <div class="section-content">
- I do random stuffs. Web Developer, Tech tinkering. Whatever you could've think of. Depends on my mood.
-  </div>
-  <div class="section-content">
- I'm actually interested in tech stuffs. Also trying to be a digital artist. Commissions not open.
+ Test site.
   </div>
 </section>
 
-<section id="projects">
-  <h2>Projects</h2>
-  <div class="projects" id="repo-list">
-    <!-- GitHub repos will load here -->
-  </div>
-</section>
-
-<section id="contact">
-  <h2>Contact</h2>
-  <div class="section-content">
-    <a href="mailto:sutee1241@outlook.com" class="button2">Email</a>
-    <a href="javascript:alert('For now, please DM me on discord: @sutee.124');" class="button2">Discord</a>
-    <a href="https://www.reddit.com/user/Sutee124/" target="_blank" class="button2">Reddit</a>
-  </div>
-</section>
 
 <footer>
   © 2026 sutee124.
 </footer>
-
-<script>
-const username = "Sutee124";
-
-fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
-  .then(response => response.json())
-  .then(repos => {
-    const repoContainer = document.getElementById("repo-list");
-
-    repos
-      .filter(repo => !repo.fork) // hide forks
-      .slice(0, 6) // show latest 6 repos
-      .forEach(repo => {
-        const card = document.createElement("div");
-        card.className = "project-card";
-
-        card.innerHTML = `
-          <h3>${repo.name}</h3>
-          <p>${repo.description ? repo.description : "No description provided."}</p>
-          <a href="${repo.html_url}" target="_blank" class="repo-link">View on GitHub ▶</a>
-        `;
-
-        repoContainer.appendChild(card);
-      });
-  })
-  .catch(error => {
-    document.getElementById("repo-list").innerHTML =
-      "<p>Unable to load repositories.</p>";
-    console.error(error);
-  });
-</script>
 
 </body>
 </html>
