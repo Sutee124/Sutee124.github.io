@@ -144,23 +144,42 @@ nav a:hover::after {
 
 .no-results {
   display: none;
-  text-align: center;
-  margin-bottom: 20px;
+  margin: 20px 0;
   color: #ff3b3b;
+  font-size: 18px;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: translateY(10px);
 }
 
 .no-results.show {
   display: block;
-  opacity: 1;
+  animation: noResultAnim 0.4s ease forwards;
+}
+
+@keyframes noResultAnim {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Subtle glow pulse */
+.no-results.show {
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
 }
 /* ===== SEARCH WRAPPER ===== */
 
 .search-wrapper {
   position: relative;
   max-width: 400px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .search-wrapper input {
@@ -242,7 +261,36 @@ section h2 {
   padding: 45px;
   line-height: 1.8;
   border: 1px solid #222;
-  transition: 0.25s ease;
+  transition: 
+    transform 0.35s ease,
+    border-color 0.25s ease,
+    opacity 0.35s ease;
+  
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hidden state */
+.downloads-card.hide {
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  pointer-events: none;
+}
+
+/* Stagger animation when appearing */
+.downloads-card.show-animate {
+  animation: cardFadeIn 0.4s ease forwards;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .downloads-card:hover {
@@ -291,6 +339,10 @@ footer {
   <div class="section-content">
  Here are the downloads. All softwares here are either mine or carefully selected by me.
   </div>
+  <br>
+    <div class="section-content">
+ Don't be surprised if you see any outdated software here. I don't have time to update the apps everyday. Consider downloading from their official website if you want the latest version.
+  </div>
   <a href="sutee124.github.io#contact" class="publisher-link">Found Malware?</a>
 </section>
 
@@ -302,6 +354,21 @@ footer {
       </div>
     </div>
       <p id="noResults" class="no-results">No results found.</p>
+      <div class="downloads-card">
+      <h3>Everything</h3> <h4> By <a href="https://www.voidtools.com/" target="_blank" class="publisher-link">VoidTools</a></h4>
+      <p>Version 1.3.4. Everything is a lightweight Windows desktop search utility that instantly locates files and folders by name, displaying results in real time as you type.</p>
+      <a href="/apps/Everything.exe" target="_blank" class="button2">Download</a>
+    </div>
+      <div class="downloads-card">
+      <h3>Roadkil's Unstoppable Copier</h3> <h4> By <a href="https://www.roadkil.net/" target="_blank" class="publisher-link">Roadkil</a></h4>
+      <p>Version 5.2.0. Unstoppable Copier can recover readable data from damaged disks. One of my favourite tools.</p>
+      <a href="/apps/UnstoppableCopier.exe" target="_blank" class="button2">Download</a>
+    </div>
+      <div class="downloads-card">
+      <h3>AnyDesk</h3> <h4> By <a href="https://anydesk.com/" target="_blank" class="publisher-link">AnyDesk Software GmbH</a></h4>
+      <p>Version 9.5.6. AnyDesk is a lightweight remote desktop program that lets you securely access and control your another computer over the internet in real time.</p>
+      <a href="/apps/AnyDesk.exe" target="_blank" class="button2">Download</a>
+    </div>
      <div class="downloads-card">
       <h3>GPU-Z</h3> <h4> By <a href="https://www.techpowerup.com/" target="_blank" class="publisher-link">TechPowerUp</a></h4>
       <p>Version 2.57.0. GPU-Z is a free utility for Windows that shows detailed information about your graphics card. It is portable btw. </p>
@@ -314,7 +381,7 @@ footer {
     </div>
      <div class="downloads-card">
       <h3>Windhawk</h3> <h4>By <a href="https://ramensoftware.com/" target="_blank" class="publisher-link">Ramen Software</a></h4>
-      <p>Version 1.6.0. Windhawk is a free and open-source Windows customization tool that lets you modify how Windows behaves without permanently patching system files. Think of it as a modern, safer version of old-school Windows tweaking tools.</p>
+      <p>Version 1.6.0. Windhawk is a literal Windows customization store. It's a free and open-source Windows customization tool that lets you modify how Windows behaves without permanently patching system files. Think of it as a marketplace of modern, safer version of old-school Windows tweaking tools. (omg this description is so long.)</p>
       <a href="/apps/windhawk_setup.exe" target="_blank" class="button2">Download</a>
     </div>
      <div class="downloads-card">
@@ -337,30 +404,41 @@ const clearBtn = document.getElementById("clearBtn");
 function filterCards() {
   const filter = searchInput.value.toLowerCase();
   let visibleCount = 0;
+  let delay = 0;
 
   cards.forEach(card => {
     const text = card.innerText.toLowerCase();
 
     if (text.includes(filter)) {
-      card.style.display = "";
+      card.classList.remove("hide");
+
+      // remove old animation first
+      card.classList.remove("show-animate");
+      void card.offsetWidth; // force reflow
+
+      // stagger delay
+      card.style.animationDelay = delay + "ms";
+      card.classList.add("show-animate");
+
+      delay += 80; // stagger speed
       visibleCount++;
     } else {
-      card.style.display = "none";
+      card.classList.add("hide");
+      card.classList.remove("show-animate");
     }
   });
 
-  // Show / hide no results
+  // Animated no results
   if (visibleCount === 0 && filter !== "") {
     noResults.classList.add("show");
   } else {
     noResults.classList.remove("show");
   }
 
-  // Show / hide clear button
   clearBtn.style.display = filter ? "block" : "none";
 }
 
-searchInput.addEventListener("keyup", filterCards);
+searchInput.addEventListener("input", filterCards);
 
 clearBtn.addEventListener("click", function () {
   searchInput.value = "";
