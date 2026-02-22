@@ -149,43 +149,6 @@ nav a:hover::after {
   transform: translateY(-2px);
 }
 
-.dropdown-menu {
-  position: absolute;
-  top: 110%;
-  left: 0;
-  background: #111;
-  border: 1px solid #ff0000;
-  min-width: 180px;
-
-  display: flex;
-  flex-direction: column;
-
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
-  transition: 0.25s ease;
-  z-index: 1000;
-}
-
-.dropdown-menu a {
-  padding: 12px 16px;
-  color: #fff;
-  text-decoration: none;
-  font-size: 14px;
-  border-bottom: 1px solid #222;
-}
-
-.dropdown-menu a:hover {
-  background: #1a1a1a;
-}
-
-/* SHOW STATE */
-.dropdown-menu.active {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
 /* ===== SECTIONS ===== */
 
 section {
@@ -270,13 +233,8 @@ footer {
   <div>
     <h1>Hey. I'm Sutee.</h1>
     <p>I do random stuffs.</p>
-    <a href="#" id="linksToggle" class="button">My Links</a>
-      <div class="dropdown-menu" id="linksMenu">
-        <a href="https://www.example.com" target="_blank">Example</a>
-        <a href="https://www.reddit.com/user/Sutee124/" target="_blank">Reddit</a>
-        <a href="#" id="discordDropdown">Discord</a>
-      </div>
-    <a href="downloads.html" class="button">Downloads</a>
+    <a href="https://github.com/Sutee124" class="button">GitHub</a>
+    <a href="downloads" class="button">Downloads</a>
   </div>
 </div>
 
@@ -339,29 +297,6 @@ fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
       "<p>Unable to load repositories.</p>";
     console.error(error);
   });
-</script>
-
-<script>
-const toggleBtn = document.getElementById("linksToggle");
-const menu = document.getElementById("linksMenu");
-const discordItem = document.getElementById("discordDropdown");
-
-// Toggle dropdown
-toggleBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  menu.classList.toggle("active");
-});
-
-// Close when clicking outside
-document.addEventListener("click", () => {
-  menu.classList.remove("active");
-});
-
-// Discord alert
-discordItem.addEventListener("click", (e) => {
-  e.preventDefault();
-  alert("For now, please DM me on discord: @sutee.124");
-});
 </script>
 
 </body>
