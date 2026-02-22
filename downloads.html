@@ -261,19 +261,15 @@ section h2 {
   padding: 45px;
   line-height: 1.8;
   border: 1px solid #222;
-  transition: 
-    transform 0.35s ease,
-    border-color 0.25s ease,
-    opacity 0.35s ease;
-  
+  transition: opacity 0.3s ease, transform 0.3s ease;
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Hidden state */
+/* Hidden */
 .downloads-card.hide {
   opacity: 0;
-  transform: translateY(20px) scale(0.98);
+  transform: translateY(10px);
   pointer-events: none;
 }
 
@@ -401,38 +397,44 @@ const cards = document.querySelectorAll(".downloads-card");
 const noResults = document.getElementById("noResults");
 const clearBtn = document.getElementById("clearBtn");
 
+let lastVisibleState = new Map();
+
+cards.forEach(card => {
+  lastVisibleState.set(card, true);
+});
+
 function filterCards() {
   const filter = searchInput.value.toLowerCase();
   let visibleCount = 0;
-  let delay = 0;
 
   cards.forEach(card => {
     const text = card.innerText.toLowerCase();
+    const shouldBeVisible = text.includes(filter);
+    const wasVisible = lastVisibleState.get(card);
 
-    if (text.includes(filter)) {
-      card.classList.remove("hide");
-
-      // remove old animation first
-      card.classList.remove("show-animate");
-      void card.offsetWidth; // force reflow
-
-      // stagger delay
-      card.style.animationDelay = delay + "ms";
-      card.classList.add("show-animate");
-
-      delay += 80; // stagger speed
+    if (shouldBeVisible) {
       visibleCount++;
+
+      if (!wasVisible) {
+        // Only animate if it was previously hidden
+        card.classList.remove("hide");
+      }
     } else {
-      card.classList.add("hide");
-      card.classList.remove("show-animate");
+      if (wasVisible) {
+        card.classList.add("hide");
+      }
     }
+
+    lastVisibleState.set(card, shouldBeVisible);
   });
 
-  // Animated no results
+  // No results (only briefly)
   if (visibleCount === 0 && filter !== "") {
     noResults.classList.add("show");
-  } else {
-    noResults.classList.remove("show");
+
+    setTimeout(() => {
+      noResults.classList.remove("show");
+    }, 1200); // disappears after 1.2s
   }
 
   clearBtn.style.display = filter ? "block" : "none";
