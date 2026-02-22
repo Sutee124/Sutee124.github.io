@@ -142,6 +142,60 @@ nav a:hover::after {
   border-color: #ff3b3b;
 }
 
+.no-results {
+  display: none;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ff3b3b;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.no-results.show {
+  display: block;
+  opacity: 1;
+}
+/* ===== SEARCH WRAPPER ===== */
+
+.search-wrapper {
+  position: relative;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.search-wrapper input {
+  width: 100%;
+  padding: 12px 40px 12px 15px; /* space for X */
+  background: #111;
+  border: 1px solid #222;
+  color: #fff;
+  font-family: Imagine, Tahoma, sans-serif;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.search-wrapper input:focus {
+  border-color: #ff3b3b;
+}
+
+/* Clear Button */
+
+.clear-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ff3b3b;
+  font-size: 18px;
+  cursor: pointer;
+  display: none;
+  transition: 0.2s ease;
+}
+
+.clear-btn:hover {
+  color: #ff0000;
+}
+
 /* ===== SECTIONS ===== */
 
 section {
@@ -174,7 +228,7 @@ section h2 {
   opacity: 0.85;
 }
 
-/* ===== PROJECT GRID ===== */
+/* ===== DOWNLOADS GRID ===== */
 
 .downloads {
   display: grid;
@@ -241,9 +295,13 @@ footer {
 </section>
 
 <section id="downloads">
-     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Search...">
+    <div class="search-box">
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" placeholder="Search...">
+        <span id="clearBtn" class="clear-btn">&times;</span>
+      </div>
     </div>
+      <p id="noResults" class="no-results">No results found.</p>
      <div class="downloads-card">
       <h3>GPU-Z</h3> <h4> By <a href="https://www.techpowerup.com/" target="_blank" class="publisher-link">TechPowerUp</a></h4>
       <p>Version 2.57.0. GPU-Z is a free utility for Windows that shows detailed information about your graphics card. It is portable btw. </p>
@@ -273,19 +331,41 @@ footer {
 <script>
 const searchInput = document.getElementById("searchInput");
 const cards = document.querySelectorAll(".downloads-card");
+const noResults = document.getElementById("noResults");
+const clearBtn = document.getElementById("clearBtn");
 
-searchInput.addEventListener("keyup", function () {
+function filterCards() {
   const filter = searchInput.value.toLowerCase();
+  let visibleCount = 0;
 
   cards.forEach(card => {
     const text = card.innerText.toLowerCase();
 
     if (text.includes(filter)) {
       card.style.display = "";
+      visibleCount++;
     } else {
       card.style.display = "none";
     }
   });
+
+  // Show / hide no results
+  if (visibleCount === 0 && filter !== "") {
+    noResults.classList.add("show");
+  } else {
+    noResults.classList.remove("show");
+  }
+
+  // Show / hide clear button
+  clearBtn.style.display = filter ? "block" : "none";
+}
+
+searchInput.addEventListener("keyup", filterCards);
+
+clearBtn.addEventListener("click", function () {
+  searchInput.value = "";
+  filterCards();
+  searchInput.focus();
 });
 </script>
 
