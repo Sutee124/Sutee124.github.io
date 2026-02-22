@@ -112,6 +112,9 @@ nav a:hover::after {
   text-decoration: none;
   font-weight: bold;
   transition: 0.2s;
+  padding: 0;
+  border:none;
+  font-family: Imagine;
 }
 
 .button2:hover {
@@ -122,7 +125,7 @@ nav a:hover::after {
 
 canvas {
   border: 2px solid #ff0000;
-  background: #111;
+  background: #ffffff; 
   cursor: crosshair;
   display: block;
 }
@@ -149,6 +152,28 @@ input[type="color"] {
 
 input[type="range"] {
   accent-color: #ff3b3b;
+}
+
+/* Brush Preview Circle */
+#brushPreview {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ff0000;
+  background: #000;
+}
+
+input {
+  width: 70%;
+  padding: 10px;
+  background: #111;
+  border: 2px solid #ff0000;
+  color: #fff;
+  font-family: Imagine, Tahoma, sans-serif;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ff3b3b;
 }
 /* ===== SECTIONS ===== */
 
@@ -222,10 +247,12 @@ footer {
 
     <div class="tools">
       <label>Color</label>
-      <input type="color" id="colorPicker" value="#ff3b3b">
+      <input type="color" id="colorPicker" value="#000000">
 
       <label>Brush Size</label>
-      <input type="range" id="brushSize" min="1" max="30" value="3">
+      <input type="range" id="brushSize" min="1" max="50" value="5">
+
+      <div id="brushPreview"></div>
 
       <button class="button2" onclick="toggleEraser()">Eraser</button>
       <button class="button2" onclick="clearCanvas()">Clear</button>
@@ -240,7 +267,7 @@ footer {
 </section>
 
 <section id="ask">
-  <h2>Ask Me Anything [BETA: May not always work!]</h2>
+  <h2>Ask Me Anything Beta</h2>
   <div class="section-content">
     <input type="text" id="questionInput" placeholder="Type your question here..." />
     <button class="button2" onclick="submitQuestion()">Send</button>
@@ -256,28 +283,28 @@ footer {
 const canvas = document.getElementById("board");
 const ctx = canvas.getContext("2d");
 
+const colorPicker = document.getElementById("colorPicker");
+const brushSizeSlider = document.getElementById("brushSize");
+const brushPreview = document.getElementById("brushPreview");
+
 let drawing = false;
-let currentColor = document.getElementById("colorPicker").value;
-let brushSize = document.getElementById("brushSize").value;
+let currentColor = "#000000";
+let brushSize = 5;
 let erasing = false;
 
-// ===== EVENTS =====
+// ===== INITIAL SETUP =====
+updateBrushPreview();
 
+// ===== DRAW EVENTS =====
 canvas.addEventListener("mousedown", startDraw);
 canvas.addEventListener("mouseup", stopDraw);
 canvas.addEventListener("mouseout", stopDraw);
 canvas.addEventListener("mousemove", draw);
 
-// Touch support (mobile)
-canvas.addEventListener("touchstart", startDraw);
-canvas.addEventListener("touchend", stopDraw);
-canvas.addEventListener("touchmove", drawTouch);
-
-// ===== DRAW FUNCTIONS =====
-
 function startDraw(e) {
   drawing = true;
   ctx.beginPath();
+  draw(e);
 }
 
 function stopDraw() {
@@ -289,8 +316,14 @@ function draw(e) {
   if (!drawing) return;
 
   ctx.lineWidth = brushSize;
-  ctx.lineCap = "square";
-  ctx.strokeStyle = erasing ? "#111" : currentColor;
+  ctx.lineCap = "round";
+
+  if (erasing) {
+    ctx.globalCompositeOperation = "destination-out";
+  } else {
+    ctx.globalCompositeOperation = "source-over";
+    ctx.strokeStyle = currentColor;
+  }
 
   ctx.lineTo(e.offsetX, e.offsetY);
   ctx.stroke();
@@ -298,36 +331,17 @@ function draw(e) {
   ctx.moveTo(e.offsetX, e.offsetY);
 }
 
-// Mobile touch support
-function drawTouch(e) {
-  if (!drawing) return;
-  e.preventDefault();
-
-  const rect = canvas.getBoundingClientRect();
-  const touch = e.touches[0];
-
-  const x = touch.clientX - rect.left;
-  const y = touch.clientY - rect.top;
-
-  ctx.lineWidth = brushSize;
-  ctx.lineCap = "square";
-  ctx.strokeStyle = erasing ? "#111" : currentColor;
-
-  ctx.lineTo(x, y);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-}
-
 // ===== TOOL CONTROLS =====
 
-document.getElementById("colorPicker").addEventListener("input", function() {
+colorPicker.addEventListener("input", function() {
   currentColor = this.value;
   erasing = false;
+  updateBrushPreview();
 });
 
-document.getElementById("brushSize").addEventListener("input", function() {
+brushSizeSlider.addEventListener("input", function() {
   brushSize = this.value;
+  updateBrushPreview();
 });
 
 function toggleEraser() {
@@ -338,13 +352,21 @@ function clearCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-// ===== SAVE FUNCTION =====
+// ===== SAVE PNG =====
 
 function saveDrawing() {
   const link = document.createElement("a");
-  link.download = "sutee_drawing.png";
+  link.download = "drawing.png";
   link.href = canvas.toDataURL("image/png");
   link.click();
+}
+
+// ===== BRUSH PREVIEW =====
+
+function updateBrushPreview() {
+  brushPreview.style.width = brushSize + "px";
+  brushPreview.style.height = brushSize + "px";
+  brushPreview.style.background = currentColor;
 }
 </script>
 
