@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>sutee's site</title>
+<title>sutee's vbsm extreme</title>
 <link rel="icon" type="image/png+xml" href="favicon.png">
     <style>
 * {
@@ -80,8 +80,10 @@ nav a:hover::after {
   background: #ff3b3b;
   color: #fff;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: normal;
   transition: 0.2s;
+  border:none;
+  font-family: Imagine;
 }
 
 .button2:hover {
@@ -109,11 +111,11 @@ nav a:hover::after {
         #c1 {
             background: #fbf7fe;
         }
-        #btn {
-            position: fixed;
-            left: 0px;
-            top: 0px;
-        }
+#btn {
+    position: absolute;
+    left: 20px;
+    top: 120px;
+}
 #c1 {
     width: 1024px;
     height: 1024px;
@@ -130,7 +132,7 @@ nav a:hover::after {
             position: fixed;
             left: 0px;
             top: 30px;
-            display: none;
+            display: block;
         }
     </style>
 </head>
@@ -151,14 +153,17 @@ nav a:hover::after {
         <span>Browser is not supported.</span>
     </canvas>
 </div>
-    <button id="btn">CONFIG</button>
+    <button class="button2" id="btn">Settings</button>
     <div id="config">
         <textarea name="" id="kernel" cols="30" rows="10"></textarea>
         <br />
         <button class="button2" id="apply">Apply</button>
         <button class="button2" id="cancle">Cancel</button>
     </div>
+    <button class="button2 id="pauseBtn">Pause</button>
     <script>
+    let isPaused = false;
+    let animationId = null;
     var cx, cy;
     var glposition;
     var glright;
@@ -349,6 +354,7 @@ function ontimer() {
         }
     };
     function draw() {
+    if (isPaused) return;
         date = new Date();
         var t2 = date.getTime();
         //ang1 += (t2 - t1)*0.001;
@@ -380,6 +386,17 @@ window.onresize = resizeCanvas;
  
     window.onload = function () {
         resizeCanvas();
+        document.getElementById("pauseBtn").addEventListener("click", function () {
+    if (isPaused) {
+        isPaused = false;
+        this.textContent = "Pause";
+        animate(); // restart loop
+    } else {
+        isPaused = true;
+        this.textContent = "Resume";
+        cancelAnimationFrame(animationId);
+    }
+});
         var positions = [-1.0, -1.0, 0.0, 1.0, -1.0, 0.0, 1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, -1.0, 1.0, 0.0];
         var VSHADER_SOURCE =
             "#version 100 \n"+
