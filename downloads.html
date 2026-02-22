@@ -147,25 +147,20 @@ nav a:hover::after {
   margin: 20px 0;
   color: #ff3b3b;
   font-size: 18px;
-  opacity: 0;
-  transform: translateY(10px);
+  animation: fadeSlide 0.3s ease forwards;
 }
 
 .no-results.show {
   display: block;
-  animation: noResultAnim 0.4s ease forwards;
 }
 
-@keyframes noResultAnim {
-  0% {
+@keyframes fadeSlide {
+  from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(6px);
   }
-  60% {
+  to {
     opacity: 1;
-    transform: translateY(-3px);
-  }
-  100% {
     transform: translateY(0);
   }
 }
@@ -261,9 +256,16 @@ section h2 {
   padding: 45px;
   line-height: 1.8;
   border: 1px solid #222;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  opacity: 1;
-  transform: translateY(0);
+  transition: 
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    opacity 0.25s ease;
+}
+
+/* For smooth fade-out before removal */
+.downloads-card.fade-out {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
 /* Hidden */
@@ -397,44 +399,34 @@ const cards = document.querySelectorAll(".downloads-card");
 const noResults = document.getElementById("noResults");
 const clearBtn = document.getElementById("clearBtn");
 
-let lastVisibleState = new Map();
-
-cards.forEach(card => {
-  lastVisibleState.set(card, true);
-});
-
 function filterCards() {
   const filter = searchInput.value.toLowerCase();
   let visibleCount = 0;
 
   cards.forEach(card => {
     const text = card.innerText.toLowerCase();
-    const shouldBeVisible = text.includes(filter);
-    const wasVisible = lastVisibleState.get(card);
+    const matches = text.includes(filter);
 
-    if (shouldBeVisible) {
+    if (matches) {
+      card.style.display = "block";
+      requestAnimationFrame(() => {
+        card.style.opacity = "1";
+        card.style.transform = "translateY(0)";
+      });
       visibleCount++;
-
-      if (!wasVisible) {
-        // Only animate if it was previously hidden
-        card.classList.remove("hide");
-      }
     } else {
-      if (wasVisible) {
-        card.classList.add("hide");
-      }
+      card.style.opacity = "0";
+      card.style.transform = "translateY(10px)";
+      setTimeout(() => {
+        card.style.display = "none";
+      }, 200);
     }
-
-    lastVisibleState.set(card, shouldBeVisible);
   });
 
-  // No results (only briefly)
   if (visibleCount === 0 && filter !== "") {
     noResults.classList.add("show");
-
-    setTimeout(() => {
-      noResults.classList.remove("show");
-    }, 1200); // disappears after 1.2s
+  } else {
+    noResults.classList.remove("show");
   }
 
   clearBtn.style.display = filter ? "block" : "none";
