@@ -247,6 +247,10 @@ footer {
   <div class="section-content">
  Came from my abandoned StrawPage? Here you can draw in the canvas. (like the strawpage picasso gimmicks thing.)
   </div>
+    <div class="section-content">
+ Also, There's Ask Me Anything at the bottom of the page.
+  </div>
+  <a href="#ask" class="button2">Take me there!</a>
 </section>
 
 <section id="draw">
@@ -410,7 +414,7 @@ function clearCanvas() {
 
 function saveDrawing() {
   const link = document.createElement("a");
-  link.download = "sutee_drawing.png";
+  link.download = "drawing.png";
   link.href = canvas.toDataURL("image/png");
   link.click();
 }
