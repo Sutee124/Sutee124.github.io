@@ -124,22 +124,32 @@ canvas {
   border: 2px solid #ff0000;
   background: #111;
   cursor: crosshair;
+  display: block;
 }
 
-input {
-  width: 70%;
-  padding: 10px;
-  background: #111;
+.tools {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.tools label {
+  font-size: 13px;
+  color: #ff3b3b;
+}
+
+input[type="color"] {
+  width: 40px;
+  height: 30px;
   border: 2px solid #ff0000;
-  color: #fff;
-  font-family: Imagine, Tahoma, sans-serif;
+  background: #111;
+  cursor: pointer;
 }
 
-input:focus {
-  outline: none;
-  border-color: #ff3b3b;
+input[type="range"] {
+  accent-color: #ff3b3b;
 }
-
 /* ===== SECTIONS ===== */
 
 section {
@@ -206,24 +216,37 @@ footer {
   </div>
 </section>
 
+<section id="draw">
+  <h2>Draw Something</h2>
+  <div class="section-content">
+
+    <div class="tools">
+      <label>Color</label>
+      <input type="color" id="colorPicker" value="#ff3b3b">
+
+      <label>Brush Size</label>
+      <input type="range" id="brushSize" min="1" max="30" value="3">
+
+      <button class="button2" onclick="toggleEraser()">Eraser</button>
+      <button class="button2" onclick="clearCanvas()">Clear</button>
+      <button class="button2" onclick="saveDrawing()">Save PNG</button>
+    </div>
+
+    <br>
+
+    <canvas id="board" width="800" height="400"></canvas>
+
+  </div>
+</section>
+
 <section id="ask">
-  <h2>Ask Me Anything</h2>
+  <h2>Ask Me Anything [BETA: May not always work!]</h2>
   <div class="section-content">
     <input type="text" id="questionInput" placeholder="Type your question here..." />
     <button class="button2" onclick="submitQuestion()">Send</button>
     <p id="responseMessage" style="margin-top:15px; color:#ff3b3b;"></p>
   </div>
 </section>
-
-<section id="draw">
-  <h2>Draw Something</h2>
-  <div class="section-content">
-    <canvas id="board" width="800" height="400"></canvas>
-    <br><br>
-    <button class="button2" onclick="clearCanvas()">Clear</button>
-  </div>
-</section>
-
 
 <footer>
   © 2026 sutee124.
@@ -234,17 +257,40 @@ const canvas = document.getElementById("board");
 const ctx = canvas.getContext("2d");
 
 let drawing = false;
+let currentColor = document.getElementById("colorPicker").value;
+let brushSize = document.getElementById("brushSize").value;
+let erasing = false;
 
-canvas.addEventListener("mousedown", () => drawing = true);
-canvas.addEventListener("mouseup", () => drawing = false);
+// ===== EVENTS =====
+
+canvas.addEventListener("mousedown", startDraw);
+canvas.addEventListener("mouseup", stopDraw);
+canvas.addEventListener("mouseout", stopDraw);
 canvas.addEventListener("mousemove", draw);
+
+// Touch support (mobile)
+canvas.addEventListener("touchstart", startDraw);
+canvas.addEventListener("touchend", stopDraw);
+canvas.addEventListener("touchmove", drawTouch);
+
+// ===== DRAW FUNCTIONS =====
+
+function startDraw(e) {
+  drawing = true;
+  ctx.beginPath();
+}
+
+function stopDraw() {
+  drawing = false;
+  ctx.beginPath();
+}
 
 function draw(e) {
   if (!drawing) return;
 
-  ctx.lineWidth = 2;
+  ctx.lineWidth = brushSize;
   ctx.lineCap = "square";
-  ctx.strokeStyle = "#ff3b3b";
+  ctx.strokeStyle = erasing ? "#111" : currentColor;
 
   ctx.lineTo(e.offsetX, e.offsetY);
   ctx.stroke();
@@ -252,10 +298,56 @@ function draw(e) {
   ctx.moveTo(e.offsetX, e.offsetY);
 }
 
+// Mobile touch support
+function drawTouch(e) {
+  if (!drawing) return;
+  e.preventDefault();
+
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches[0];
+
+  const x = touch.clientX - rect.left;
+  const y = touch.clientY - rect.top;
+
+  ctx.lineWidth = brushSize;
+  ctx.lineCap = "square";
+  ctx.strokeStyle = erasing ? "#111" : currentColor;
+
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+}
+
+// ===== TOOL CONTROLS =====
+
+document.getElementById("colorPicker").addEventListener("input", function() {
+  currentColor = this.value;
+  erasing = false;
+});
+
+document.getElementById("brushSize").addEventListener("input", function() {
+  brushSize = this.value;
+});
+
+function toggleEraser() {
+  erasing = !erasing;
+}
+
 function clearCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
+
+// ===== SAVE FUNCTION =====
+
+function saveDrawing() {
+  const link = document.createElement("a");
+  link.download = "sutee_drawing.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
 </script>
+
 <script>
 async function submitQuestion() {
   const input = document.getElementById("questionInput");
