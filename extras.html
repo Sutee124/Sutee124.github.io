@@ -243,6 +243,13 @@ footer {
 
 <section id="top">
   <h2>Extras</h2>
+    <div class="section-content">
+Here are some random fun stuffs you can do on my site.
+  </div>
+  <br>
+  <a href="vbsm" class="button">Lag Test</a>
+  <a href="vbsm" class="button">Lag Test</a>
+  <br>
   <div class="section-content">
  Came from my abandoned StrawPage? Here you can draw in the canvas. (like the strawpage picasso gimmicks thing.)
   </div>
@@ -305,6 +312,7 @@ let currentColor = "#000000";
 let brushSize = 5;
 let erasing = false;
 let isDirty = false;
+let hasUserDrawn = false;
 
 let startX = 0;
 let startY = 0;
@@ -315,7 +323,7 @@ let historyStep = -1;
 // ===== INITIAL SETUP =====
 updateBrushPreview();
 updateCursorPreview();
-saveState();
+saveState(false);
 
 // ===== EVENTS =====
 canvas.addEventListener("mousedown", startDraw);
@@ -333,6 +341,7 @@ document.addEventListener("keydown", handleShortcuts);
 
 function startDraw(e) {
   drawing = true;
+  hasUserDrawn = true;
   startX = e.offsetX;
   startY = e.offsetY;
   ctx.beginPath();
@@ -421,7 +430,7 @@ function clearCanvas() {
 
 function saveDrawing() {
   const link = document.createElement("a");
-  link.download = "sutee_drawing.png";
+  link.download = "drawing.png";
   link.href = canvas.toDataURL("image/png");
   link.click();
   isDirty = false; // reset after saving
@@ -429,13 +438,17 @@ function saveDrawing() {
 
 // ===== UNDO / REDO =====
 
-function saveState() {
+function saveState(markDirty = true) {
   historyStep++;
   if (historyStep < history.length) {
     history.length = historyStep;
   }
+
   history.push(canvas.toDataURL());
-  isDirty = true;
+
+  if (markDirty) {
+    isDirty = true;
+  }
 }
 
 function undo() {
@@ -481,8 +494,9 @@ function updateBrushPreview() {
   brushPreview.style.height = brushSize + "px";
   brushPreview.style.background = currentColor;
 }
+
 window.addEventListener("beforeunload", function (e) {
-  if (!isDirty) return;
+  if (!isDirty || !hasUserDrawn) return;
 
   e.preventDefault();
   e.returnValue = "";
