@@ -126,13 +126,12 @@ canvas {
   border: 2px solid #ff0000;
   background: #ffffff;
   display: block;
-  cursor: none; /* hide default cursor */
+  cursor: none; 
 }
 
 #cursorPreview {
-  position: absolute;
+  position: fixed; /* was absolute before */
   pointer-events: none;
-  border: 1px solid #000;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
@@ -305,6 +304,7 @@ let drawing = false;
 let currentColor = "#000000";
 let brushSize = 5;
 let erasing = false;
+let isDirty = false;
 
 let startX = 0;
 let startY = 0;
@@ -375,7 +375,6 @@ function draw(e) {
 // ===== CURSOR PREVIEW =====
 
 function moveCursor(e) {
-  const rect = canvas.getBoundingClientRect();
   cursorPreview.style.left = e.clientX + "px";
   cursorPreview.style.top = e.clientY + "px";
 }
@@ -403,6 +402,14 @@ brushSizeSlider.addEventListener("input", function() {
 
 function toggleEraser() {
   erasing = !erasing;
+
+  const btn = document.getElementById("eraserBtn");
+
+  if (erasing) {
+    btn.textContent = "Pen";
+  } else {
+    btn.textContent = "Eraser";
+  }
 }
 
 function clearCanvas() {
@@ -414,9 +421,10 @@ function clearCanvas() {
 
 function saveDrawing() {
   const link = document.createElement("a");
-  link.download = "drawing.png";
+  link.download = "sutee_drawing.png";
   link.href = canvas.toDataURL("image/png");
   link.click();
+  isDirty = false; // reset after saving
 }
 
 // ===== UNDO / REDO =====
@@ -427,6 +435,7 @@ function saveState() {
     history.length = historyStep;
   }
   history.push(canvas.toDataURL());
+  isDirty = true;
 }
 
 function undo() {
@@ -472,6 +481,12 @@ function updateBrushPreview() {
   brushPreview.style.height = brushSize + "px";
   brushPreview.style.background = currentColor;
 }
+window.addEventListener("beforeunload", function (e) {
+  if (!isDirty) return;
+
+  e.preventDefault();
+  e.returnValue = "";
+});
 </script>
 
 <script>
