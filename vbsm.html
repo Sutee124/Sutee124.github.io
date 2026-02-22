@@ -386,17 +386,6 @@ window.onresize = resizeCanvas;
  
     window.onload = function () {
         resizeCanvas();
-        document.getElementById("pauseBtn").addEventListener("click", function () {
-    if (isPaused) {
-        isPaused = false;
-        this.textContent = "Pause";
-        animate(); // restart loop
-    } else {
-        isPaused = true;
-        this.textContent = "Resume";
-        cancelAnimationFrame(animationId);
-    }
-});
         var positions = [-1.0, -1.0, 0.0, 1.0, -1.0, 0.0, 1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, -1.0, 1.0, 0.0];
         var VSHADER_SOURCE =
             "#version 100 \n"+
