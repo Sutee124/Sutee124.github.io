@@ -110,9 +110,8 @@ nav a:hover::after {
   background: #ff3b3b;
   color: #fff;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: normal;
   transition: 0.2s;
-  padding: 0;
   border:none;
   font-family: Imagine;
 }
@@ -125,9 +124,18 @@ nav a:hover::after {
 
 canvas {
   border: 2px solid #ff0000;
-  background: #ffffff; 
-  cursor: crosshair;
+  background: #ffffff;
   display: block;
+  cursor: none; /* hide default cursor */
+}
+
+#cursorPreview {
+  position: absolute;
+  pointer-events: none;
+  border: 1px solid #000;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
 }
 
 .tools {
@@ -262,6 +270,7 @@ footer {
     <br>
 
     <canvas id="board" width="800" height="400"></canvas>
+    <div id="cursorPreview"></div>
 
   </div>
 </section>
@@ -286,34 +295,62 @@ const ctx = canvas.getContext("2d");
 const colorPicker = document.getElementById("colorPicker");
 const brushSizeSlider = document.getElementById("brushSize");
 const brushPreview = document.getElementById("brushPreview");
+const cursorPreview = document.getElementById("cursorPreview");
 
 let drawing = false;
 let currentColor = "#000000";
 let brushSize = 5;
 let erasing = false;
 
+let startX = 0;
+let startY = 0;
+
+let history = [];
+let historyStep = -1;
+
 // ===== INITIAL SETUP =====
 updateBrushPreview();
+updateCursorPreview();
+saveState();
 
-// ===== DRAW EVENTS =====
+// ===== EVENTS =====
 canvas.addEventListener("mousedown", startDraw);
 canvas.addEventListener("mouseup", stopDraw);
 canvas.addEventListener("mouseout", stopDraw);
 canvas.addEventListener("mousemove", draw);
 
+canvas.addEventListener("mousemove", moveCursor);
+canvas.addEventListener("mouseenter", () => cursorPreview.style.display = "block");
+canvas.addEventListener("mouseleave", () => cursorPreview.style.display = "none");
+
+document.addEventListener("keydown", handleShortcuts);
+
+// ===== DRAWING =====
+
 function startDraw(e) {
   drawing = true;
+  startX = e.offsetX;
+  startY = e.offsetY;
   ctx.beginPath();
-  draw(e);
 }
 
-function stopDraw() {
+function stopDraw(e) {
+  if (!drawing) return;
   drawing = false;
+
+  if (e.shiftKey) {
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+  }
+
   ctx.beginPath();
+  saveState();
 }
 
 function draw(e) {
-  if (!drawing) return;
+  if (!drawing || e.shiftKey) return;
 
   ctx.lineWidth = brushSize;
   ctx.lineCap = "round";
@@ -331,17 +368,33 @@ function draw(e) {
   ctx.moveTo(e.offsetX, e.offsetY);
 }
 
+// ===== CURSOR PREVIEW =====
+
+function moveCursor(e) {
+  const rect = canvas.getBoundingClientRect();
+  cursorPreview.style.left = e.clientX + "px";
+  cursorPreview.style.top = e.clientY + "px";
+}
+
+function updateCursorPreview() {
+  cursorPreview.style.width = brushSize + "px";
+  cursorPreview.style.height = brushSize + "px";
+  cursorPreview.style.borderColor = currentColor;
+}
+
 // ===== TOOL CONTROLS =====
 
 colorPicker.addEventListener("input", function() {
   currentColor = this.value;
   erasing = false;
   updateBrushPreview();
+  updateCursorPreview();
 });
 
 brushSizeSlider.addEventListener("input", function() {
   brushSize = this.value;
   updateBrushPreview();
+  updateCursorPreview();
 });
 
 function toggleEraser() {
@@ -350,18 +403,65 @@ function toggleEraser() {
 
 function clearCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  saveState();
 }
 
 // ===== SAVE PNG =====
 
 function saveDrawing() {
   const link = document.createElement("a");
-  link.download = "drawing.png";
+  link.download = "sutee_drawing.png";
   link.href = canvas.toDataURL("image/png");
   link.click();
 }
 
-// ===== BRUSH PREVIEW =====
+// ===== UNDO / REDO =====
+
+function saveState() {
+  historyStep++;
+  if (historyStep < history.length) {
+    history.length = historyStep;
+  }
+  history.push(canvas.toDataURL());
+}
+
+function undo() {
+  if (historyStep > 0) {
+    historyStep--;
+    let img = new Image();
+    img.src = history[historyStep];
+    img.onload = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+    };
+  }
+}
+
+function redo() {
+  if (historyStep < history.length - 1) {
+    historyStep++;
+    let img = new Image();
+    img.src = history[historyStep];
+    img.onload = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+    };
+  }
+}
+
+// Keyboard shortcuts
+function handleShortcuts(e) {
+  if (e.ctrlKey && e.key === "z") {
+    e.preventDefault();
+    undo();
+  }
+  if (e.ctrlKey && e.key === "y") {
+    e.preventDefault();
+    redo();
+  }
+}
+
+// ===== BRUSH PREVIEW BOX =====
 
 function updateBrushPreview() {
   brushPreview.style.width = brushSize + "px";
