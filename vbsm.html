@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>sutee's vbsm extreme</title>
+<title>sutee's site</title>
 <link rel="icon" type="image/png+xml" href="favicon.png">
     <style>
 * {
@@ -74,23 +74,7 @@ nav a::after {
 nav a:hover::after {
   width: 100%;
 }
-  .button2 {
-  display: inline-block;
-  padding: 3px 25px;
-  background: #ff3b3b;
-  color: #fff;
-  text-decoration: none;
-  font-weight: normal;
-  transition: 0.2s;
-  border:none;
-  font-family: Imagine;
-}
 
-.button2:hover {
-  background: #ff0000;
-  text-decoration: underline;
-  transform: translateY(-2px);
-}
 .logo img {
   max-height: 24px;
 }
@@ -111,28 +95,27 @@ nav a:hover::after {
         #c1 {
             background: #fbf7fe;
         }
-#btn {
-    position: absolute;
-    left: 20px;
-    top: 120px;
-}
-#c1 {
-    width: 1024px;
-    height: 1024px;
-    display: block;
-}
-#main {
-    position: absolute;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    transform-origin: top center;
-}
+        #btn {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+        }
+        #c1 {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+        }
+        #main {
+            transform-origin: 0px 0px;
+            position: fixed;
+            left: 0px;
+            top: 0px;
+        }
         #config {
             position: fixed;
             left: 0px;
             top: 30px;
-            display: block;
+            display: none;
         }
     </style>
 </head>
@@ -153,17 +136,15 @@ nav a:hover::after {
         <span>Browser is not supported.</span>
     </canvas>
 </div>
-    <button class="button2" id="btn">Settings</button>
+    <button id="btn">CONFIG</button>
     <div id="config">
         <textarea name="" id="kernel" cols="30" rows="10"></textarea>
         <br />
         <button class="button2" id="apply">Apply</button>
         <button class="button2" id="cancle">Cancel</button>
     </div>
-    <button class="button2 id="pauseBtn">Pause</button>
     <script>
-    let isPaused = false;
-    let animationId = null;
+alert("trigonometric and inverse trigonometric functions test.\ncreated by cznull@bilibili");
     var cx, cy;
     var glposition;
     var glright;
@@ -354,7 +335,6 @@ function ontimer() {
         }
     };
     function draw() {
-    if (isPaused) return;
         date = new Date();
         var t2 = date.getTime();
         //ang1 += (t2 - t1)*0.001;
@@ -370,22 +350,31 @@ function ontimer() {
         gl.drawArrays(gl.TRIANGLES, 0, 6);
         gl.finish();
     }
-    function resizeCanvas() {
-    var navbarHeight = document.querySelector("nav").offsetHeight;
-    var availableHeight = window.innerHeight - navbarHeight - 20;
-    var availableWidth = window.innerWidth;
-
-    var size = Math.min(availableWidth * 0.9, availableHeight);
-
-    document.getElementById("main").style.width = size + "px";
-    document.getElementById("main").style.height = size + "px";
-    document.getElementById("main").style.transform = "translateX(-50%) scale(" + size / 1024 + ")";
-}
-
-window.onresize = resizeCanvas;
- 
+    window.onresize = function () {
+        cx = document.body.clientWidth;
+        cy = document.body.clientHeight;
+        if(cx>cy){
+            cx=cy;
+        }
+        else{
+            cy=cx;
+        }
+        document.getElementById("main").style.width=1024+"px";
+        document.getElementById("main").style.height=1024+"px";
+        document.getElementById("main").style.transform="scale("+cx/1024+","+cy/1024+")";
+    }
     window.onload = function () {
-        resizeCanvas();
+        cx = document.body.clientWidth;
+        cy = document.body.clientHeight;
+        if(cx>cy){
+            cx=cy;
+        }
+        else{
+            cy=cx;
+        }
+        document.getElementById("main").style.width=1024+"px";
+        document.getElementById("main").style.height=1024+"px";
+        document.getElementById("main").style.transform="scale("+cx/1024+","+cy/1024+")";
         var positions = [-1.0, -1.0, 0.0, 1.0, -1.0, 0.0, 1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, -1.0, 1.0, 0.0];
         var VSHADER_SOURCE =
             "#version 100 \n"+
