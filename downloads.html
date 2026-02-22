@@ -389,38 +389,39 @@ const clearBtn = document.getElementById("clearBtn");
 function filterCards() {
   const filter = searchInput.value.toLowerCase();
 
-  // FIRST: record initial positions
-  const firstPositions = new Map();
+  // FIRST: measure initial positions
+  const firstRects = new Map();
   cards.forEach(card => {
-    firstPositions.set(card, card.getBoundingClientRect());
+    if (card.style.display !== "none") {
+      firstRects.set(card, card.getBoundingClientRect());
+    }
   });
 
   let visibleCount = 0;
 
   // Apply filtering
   cards.forEach(card => {
-    const text = card.innerText.toLowerCase();
-    const matches = text.includes(filter);
-
-    if (matches) {
-      card.style.display = "block";
-      visibleCount++;
-    } else {
-      card.style.display = "none";
-    }
+    const matches = card.innerText.toLowerCase().includes(filter);
+    card.style.display = matches ? "block" : "none";
+    if (matches) visibleCount++;
   });
 
-  // LAST: record new positions
-  const lastPositions = new Map();
+  // Force layout recalculation
+  document.body.offsetHeight;
+
+  // LAST: measure new positions
+  const lastRects = new Map();
   cards.forEach(card => {
     if (card.style.display !== "none") {
-      lastPositions.set(card, card.getBoundingClientRect());
+      lastRects.set(card, card.getBoundingClientRect());
     }
   });
 
-  // INVERT + PLAY
-  lastPositions.forEach((last, card) => {
-    const first = firstPositions.get(card);
+  // Animate movement
+  lastRects.forEach((last, card) => {
+    const first = firstRects.get(card);
+    if (!first) return;
+
     const deltaX = first.left - last.left;
     const deltaY = first.top - last.top;
 
@@ -428,12 +429,12 @@ function filterCards() {
       card.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
 
       requestAnimationFrame(() => {
-        card.style.transform = "";
+        card.style.transform = "translate(0, 0)";
       });
     }
   });
 
-  // No results
+  // No results handling
   if (visibleCount === 0 && filter !== "") {
     noResults.classList.add("show");
   } else {
