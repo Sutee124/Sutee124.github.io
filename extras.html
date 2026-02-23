@@ -141,53 +141,103 @@ nav a:hover::after {
   transform: translateY(-2px);
 }
 
-canvas {
-  border: 2px solid #ff0000;
-  background: #ffffff;
-  display: block;
-  cursor: none; 
+#draw {
+  padding: 40px 20px;
 }
 
-#cursorPreview {
-  position: fixed; /* was absolute before */
-  pointer-events: none;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-}
-
-.tools {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.tools label {
-  font-size: 13px;
-  color: #ff3b3b;
-}
-
-input[type="color"] {
-  width: 40px;
-  height: 30px;
-  border: 2px solid #ff0000;
+.draw-container {
+  max-width: 1000px;
+  margin: auto;
   background: #111;
-  cursor: pointer;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
-input[type="range"] {
-  accent-color: #ff3b3b;
+/* Toolbar */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-/* Brush Preview Circle */
+.tool-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tool-group label {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* Brush preview */
 #brushPreview {
-  width: 20px;
-  height: 20px;
-  border: 1px solid #ff0000;
-  background: #000;
+  border-radius: 50%;
+  background: black;
 }
 
+/* Buttons */
+.tool-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #222;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tool-btn:hover {
+  background: #333;
+}
+
+.tool-btn.primary {
+  background: #2979ff;
+}
+
+.tool-btn.primary:hover {
+  background: #1565c0;
+}
+
+.tool-btn.danger {
+  background: #b71c1c;
+}
+
+.tool-btn.danger:hover {
+  background: #7f0000;
+}
+
+/* Active eraser state */
+.tool-btn.active {
+  background: #ff9800;
+}
+
+/* Canvas */
+.canvas-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+canvas {
+  background: white;
+  border-radius: 12px;
+  cursor: none;
+}
+
+/* Cursor preview */
+#cursorPreview {
+  position: fixed;
+  border: 1px solid white;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: none;
+}
 input {
   width: 70%;
   padding: 10px;
@@ -281,26 +331,38 @@ Here are some random fun stuffs you can do on my site.
 
 <section id="draw">
   <h2>Draw Something</h2>
-  <div class="section-content">
 
-    <div class="tools">
-      <label>Color</label>
-      <input type="color" id="colorPicker" value="#000000">
+  <div class="draw-container">
 
-      <label>Brush Size</label>
-      <input type="range" id="brushSize" min="1" max="50" value="5">
+    <!-- TOOLBAR -->
+    <div class="toolbar">
 
-      <div id="brushPreview"></div>
+      <div class="tool-group">
+        <label>Color</label>
+        <input type="color" id="colorPicker" value="#000000">
+      </div>
 
-      <button class="button2" onclick="toggleEraser()">Eraser</button>
-      <button class="button2" onclick="clearCanvas()">Clear</button>
-      <button class="button2" onclick="saveDrawing()">Save PNG</button>
+      <div class="tool-group">
+        <label>Size</label>
+        <input type="range" id="brushSize" min="1" max="50" value="5">
+        <div id="brushPreview"></div>
+      </div>
+
+      <div class="tool-group buttons">
+        <button class="tool-btn" id="eraserBtn" onclick="toggleEraser()">Eraser</button>
+        <button class="tool-btn" onclick="undo()">Undo</button>
+        <button class="tool-btn" onclick="redo()">Redo</button>
+        <button class="tool-btn danger" onclick="clearCanvas()">Clear</button>
+        <button class="tool-btn primary" onclick="saveDrawing()">Save PNG</button>
+      </div>
+
     </div>
 
-    <br>
-
-    <canvas id="board" width="800" height="400"></canvas>
-    <div id="cursorPreview"></div>
+    <!-- CANVAS AREA -->
+    <div class="canvas-wrapper">
+      <canvas id="board" width="900" height="500"></canvas>
+      <div id="cursorPreview"></div>
+    </div>
 
   </div>
 </section>
@@ -436,8 +498,10 @@ function toggleEraser() {
 
   if (erasing) {
     btn.textContent = "Pen";
+    btn.classList.add("active");
   } else {
     btn.textContent = "Eraser";
+    btn.classList.remove("active");
   }
 }
 
