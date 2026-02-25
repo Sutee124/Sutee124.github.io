@@ -118,9 +118,13 @@ nav a:hover::after {
   margin-bottom: 25px;
 }
 
+/*buttons*/
+
 .button {
-  display: inline-block;
-  padding: 14px 25px;
+  display: inline-flex;     /* aligns icon + text */
+  align-items: center;      /* vertical alignment */
+  gap: 8px;                 /* space between icon and text */
+  padding: 10px 18px;       /* slightly tighter padding */
   background: #ff3b3b;
   color: #fff;
   text-decoration: none;
@@ -131,6 +135,13 @@ nav a:hover::after {
 .button:hover {
   background: #ff0000;
   transform: translateY(-2px);
+}
+
+.button .icon {
+  width: 16px;     /* makes it smaller */
+  height: 16px;
+  display: block;  /* removes weird baseline spacing */
+  fill: white;
 }
 
   .button2 {
@@ -247,7 +258,6 @@ footer {
     <a href="https://www.github.com/Sutee124" class="button"><img src="/assets/media/github.svg" class="icon" alt="">GitHub</a>
     <a href="https://www.reddit.com/u/sutee124" class="button"><img src="/assets/media/reddit.svg" class="icon" alt="">Reddit</a>
     <a href="https://www.youtube.com/@suteeishere" class="button"><img src="/assets/media/youtube.svg" class="icon" alt="">YouTube</a>
-    <a href="extras" class="button">Extras</a>
   </div>
 </div>
 
