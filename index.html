@@ -152,7 +152,7 @@ nav a:hover::after {
   height: 16px;
 }
 
-  .button2 {
+.button2 {
   display: inline-block;
   padding: 3px 25px;
   background: #ff3b3b;
@@ -174,6 +174,12 @@ nav a:hover::after {
   color: #fff;
   border: none;
   font-family: Imagine;
+}
+
+.button3:hover {
+  background: #ff0000;
+  text-decoration: underline;
+  transform: translateY(-2px);
 }
 
 .link {
@@ -336,6 +342,7 @@ footer {
   </div>
     <br>
   <h3>Ask Me Anything Beta</h3>
+  <br>
   <div class="section-content">
     <input type="text" id="questionInput" placeholder="Type your question here..." />
     <button class="button3" onclick="submitQuestion()">Send</button>
