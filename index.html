@@ -168,6 +168,14 @@ nav a:hover::after {
   transform: translateY(-2px);
 }
 
+.button3 {
+  padding: 11px 25px;
+  background: #ff3b3b;
+  color: #fff;
+  border: none;
+  font-family: Imagine;
+}
+
 .link {
   color: #ff3b3b;
   text-decoration: none;
@@ -208,6 +216,17 @@ section h2 {
   max-width: 800px;
   line-height: 1.6;
   opacity: 0.85;
+}
+
+/*===== ASK THING =====*/
+
+input {
+  width: 70%;
+  padding: 10px;
+  background: #111;
+  border: 2px solid #ff0000;
+  color: #fff;
+  font-family: Imagine, Tahoma, sans-serif;
 }
 
 /* ===== PROJECT GRID ===== */
@@ -316,6 +335,12 @@ footer {
    Yes. The old server is gone and I wiped the HDD. But still wanted to download my apps? Head over to the <a href="downloads" class="link">downloads page.</a> Note that some of the apps I created are removed.
   </div>
     <br>
+  <h3>Ask Me Anything Beta</h3>
+  <div class="section-content">
+    <input type="text" id="questionInput" placeholder="Type your question here..." />
+    <button class="button3" onclick="submitQuestion()">Send</button>
+    <p id="responseMessage" style="margin-top:15px; color:#ff3b3b;"></p>
+  </div>
 </section>
 
 <section id="projects">
@@ -397,6 +422,41 @@ fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
   .catch(error => {
     console.error(error);
   });
+</script>
+<!--Ask Me Anything-->
+<script>
+async function submitQuestion() {
+  const input = document.getElementById("questionInput");
+  const message = document.getElementById("responseMessage");
+
+  const question = input.value.trim();
+
+  if (!question) {
+    message.textContent = "Please type something.";
+    return;
+  }
+
+  message.textContent = "Sending...";
+
+  try {
+    const response = await fetch("https://hello.sutee-avp.workers.dev/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ question })
+    });
+
+    if (response.ok) {
+      message.textContent = "Question sent anonymously!";
+      input.value = "";
+    } else {
+      message.textContent = "Something went wrong.";
+    }
+  } catch (err) {
+    message.textContent = "Error sending question.";
+  }
+}
 </script>
 
 </body>
