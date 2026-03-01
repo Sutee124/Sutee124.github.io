@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LittlePlayer Embed</title>
+<!--  LittlePlayer Lite  -->
+<!-- - littleplayer.net - -->
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: white;
+}
+
+/* Blurred background */
+.background {
+  position: fixed;
+  inset: 0;
+  background: url("album.jpg") center/cover no-repeat;
+  filter: blur(40px) brightness(0.6);
+  transform: scale(1.2);
+  z-index: -1;
+}
+
+/* Player container */
+.player {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  max-width: 900px;
+  width: 90%;
+}
+
+/* Album cover */
+.album-art {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+/* Text section */
+.song-info h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.song-info p {
+  font-size: 16px;
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+/* Audio controls styling */
+audio {
+  width: 100%;
+  filter: invert(1) brightness(1.2);
+}
+</style>
+</head>
+<body>
+
+<div class="background"></div>
+
+<div class="player">
+  <img src="album.jpg" alt="Album Cover" class="album-art">
+
+  <div class="song-info">
+    <h1>Cogito Ergo Sum ~ Conviction</h1>
+    <p>Combat Initiation • Combat Initiation OST</p>
+    <audio controls>
+      <source src="/assets/media/Combat Initiation - Cogito Ergo Sum ~ Conviction.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+</div>
+
+</body>
+</html>
