@@ -19,23 +19,16 @@
   font-family: Imagine;
   src: url(/assets/site/Imagine_Earth.ttf);
 }
-@font-face {
-  font-family: TitilliumWeb;
-  src: url(/assets/site/TitilliumWeb.ttf);
 
-}
 
 body {
-  font-family: TitilliumWeb, Tahoma, sans-serif;
+  font-family: Imagine, Tahoma, sans-serif;
   background: #000;
   color: #fff;
   overflow-x: hidden;
 }
 
-body h1 {
-  font-family: TitilliumWeb, Tahoma, sans-serif;
-  font-weight: 700;
-}
+/* ===== GLOBAL FADE IN ===== */
 
 body {
   animation: fadeIn 1s ease forwards;
@@ -134,10 +127,16 @@ nav a:hover::after {
 }
 
 .hero h1 {
-  font-family: Imagine, Tahoma, sans-serif;
   font-size: 36px;
   color: #ff3b3b;
   margin-bottom: 20px;
+  animation: glowPulse 3s infinite ease-in-out;
+}
+
+@keyframes glowPulse {
+  0% { text-shadow: 0 0 5px rgba(255,0,0,0.3); }
+  50% { text-shadow: 0 0 15px rgba(255,0,0,0.6); }
+  100% { text-shadow: 0 0 5px rgba(255,0,0,0.3); }
 }
 
 .hero p {
@@ -192,7 +191,7 @@ nav a:hover::after {
   color: #fff;
   border: none;
   transition: 0.2s;
-  font-family: TitilliumWeb;
+  font-family: Imagine;
 }
 
 .button3:hover {
