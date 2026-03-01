@@ -100,6 +100,7 @@ nav a:hover::after {
 /* ===== HERO ===== */
 
 .hero {
+  position: relative; 
   height: 90vh;
   display: flex;
   align-items: center;
@@ -107,6 +108,25 @@ nav a:hover::after {
   text-align: center;
   padding: 40px;
   background: linear-gradient(to bottom, #000, #111);
+  overflow: hidden;
+}
+
+/* background */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, #000 10%, #111 100%),
+    url("/assets/media/hero.png") center/cover no-repeat;
+  opacity: 0.15;
+  z-index: 0;
+  filter: blur(2px);
+}
+
+.hero > div {
+  position: relative;
+  z-index: 1;
 }
 
 .hero h1 {
