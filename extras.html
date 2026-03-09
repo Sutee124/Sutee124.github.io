@@ -4,151 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>sutee's extras</title>
-
-<!-- FAVICON -->
 <link rel="icon" type="image/png+xml" href="/assets/site/favicon.png">
 
+<!--style stuff-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site/style.css">
+
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-@font-face {
-  font-family: Imagine;
-  src: url(/assets/site/Imagine_Earth.ttf);
-}
-
-
-body {
-  font-family: Imagine, Tahoma, sans-serif;
-  background: #000;
-  color: #fff;
-  overflow-x: hidden;
-}
-
-/* ===== GLOBAL FADE IN ===== */
-
-body {
-  animation: fadeIn 1s ease forwards;
-  opacity: 0;
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-
-/* ===== NAVIGATION ===== */
-
-nav {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-
-  background: rgba(17, 17, 17, 0.6); /* semi transparent */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px); /* Safari support */
-
-  border-bottom: 1px solid rgba(255, 0, 0, 0.4);
-  padding: 15px 60px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  transition: background 0.3s ease, border-color 0.3s ease;
-}
-
-nav h2 {
-  color: #ff3b3b;
-}
-
-/* underline animation */
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 25px;
-}
-
-nav a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 14px;
-  position: relative;
-}
-
-nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 0%;
-  height: 2px;
-  background: #ff3b3b;
-  transition: 0.3s ease;
-}
-
-nav a:hover::after {
-  width: 100%;
-}
-
-.logo img {
-  max-height: 24px;
-}
-
-
-.button {
-  display: inline-block;
-  padding: 14px 25px;
-  background: #ff3b3b;
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-.button:hover {
-  background: #ff0000;
-  transform: translateY(-2px);
-}
-
-  .button2 {
-  display: inline-block;
-  padding: 3px 25px;
-  background: #ff3b3b;
-  color: #fff;
-  text-decoration: none;
-  font-weight: normal;
-  transition: 0.2s;
-  border:none;
-  font-family: Imagine;
-}
-
-.button2:hover {
-  background: #ff0000;
-  text-decoration: underline;
-  transform: translateY(-2px);
-}
-
-  .button3 {
-  display: inline-block;
-  padding: 11px 25px;
-  background: #ff3b3b;
-  color: #fff;
-  text-decoration: none;
-  font-weight: normal;
-  transition: 0.2s;
-  border:none;
-  font-family: Imagine;
-  transform: translateY(-1px)
-}
-
-.button3:hover {
-  background: #ff0000;
-  text-decoration: underline;
-  transform: translateY(-2px);
-}
 
 #draw {
   padding: 40px 20px;
@@ -357,16 +221,6 @@ section#top h2 {
   margin-bottom: 20px;
 }
 
-/* ===== FOOTER ===== */
-
-footer {
-  background: #111;
-  padding: 20px;
-  text-align: center;
-  border-top: 2px solid #ff0000;
-  font-size: 13px;
-  opacity: 0.6;
-}
 </style>
 </head>
 
