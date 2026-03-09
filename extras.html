@@ -260,19 +260,22 @@ input:focus {
   outline: none;
   border-color: #ff3b3b;
 }
-/* ===== SECTIONS ===== */
 
-section {
-  padding: 80px 60px;
+/* ===== ACCORDION SECTIONS ===== */
+
+.section-accordion {
   border-top: 1px solid #111;
   opacity: 0;
   transform: translateY(20px);
   animation: slideUp 0.8s ease forwards;
 }
 
-section:nth-of-type(1) { animation-delay: 0.2s; }
-section:nth-of-type(2) { animation-delay: 0.4s; }
-section:nth-of-type(3) { animation-delay: 0.6s; }
+.section-accordion:nth-of-type(1) { animation-delay: 0.2s; }
+.section-accordion:nth-of-type(2) { animation-delay: 0.4s; }
+.section-accordion:nth-of-type(3) { animation-delay: 0.6s; }
+.section-accordion:nth-of-type(4) { animation-delay: 0.8s; }
+.section-accordion:nth-of-type(5) { animation-delay: 1.0s; }
+.section-accordion:nth-of-type(6) { animation-delay: 1.2s; }
 
 @keyframes slideUp {
   to {
@@ -281,15 +284,76 @@ section:nth-of-type(3) { animation-delay: 0.6s; }
   }
 }
 
-section h2 {
+/* The toggle button acting as the section header */
+.section-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #fff;
+  font-family: Imagine, Tahoma, sans-serif;
+  font-size: 1em;
+  padding: 28px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+.section-toggle:hover {
+  background: rgba(255, 59, 59, 0.07);
+}
+
+.section-toggle h2 {
   color: #ff3b3b;
-  margin-bottom: 20px;
+  pointer-events: none;
+}
+
+.section-toggle .arrow {
+  font-size: 18px;
+  color: #ff3b3b;
+  transition: transform 0.3s ease;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.section-accordion.open .section-toggle .arrow {
+  transform: rotate(180deg);
+}
+
+/* Collapsible body */
+.section-body {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  padding: 0 60px;
+}
+
+.section-accordion.open .section-body {
+  max-height: 2000px;
+  padding: 0 60px 60px;
 }
 
 .section-content {
   max-width: 800px;
   line-height: 1.6;
   opacity: 0.85;
+}
+
+/* Top intro section stays always visible */
+section#top {
+  padding: 80px 60px;
+  border-top: 1px solid #111;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.8s ease forwards;
+  animation-delay: 0.2s;
+}
+
+section#top h2 {
+  color: #ff3b3b;
+  margin-bottom: 20px;
 }
 
 /* ===== FOOTER ===== */
@@ -336,30 +400,36 @@ Here are some random fun stuffs you can do on my site. Everything is random here
   <iframe width="110" height="200" src="https://www.myinstants.com/instant/sqeeling-pig/embed/" frameborder="0" scrolling="no"></iframe>
 </section-->
 
-<section id="player">
-  <h2>I can listen to this everyday</h2>  
-  <iframe src="/assets/media/player.html" width="100%" height="500" style="border:none;" allow="autoplay"></iframe>
-</section>
-
-<section id="clouds">
-  <h2>Clouds Minigame</h2>  
-  <div class="section-content">
- Kirby needs 10 stars to win. Idk what to say.
+<div class="section-accordion" id="acc-player">
+  <button class="section-toggle" onclick="toggleSection('acc-player')" aria-expanded="false">
+    <h2>Music Zone</h2>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="section-body">
+    <iframe src="/assets/media/player.html" width="100%" height="500" style="border:none;" allow="autoplay"></iframe>
   </div>
-  <br>
-  <iframe src="assets/media/Cloud Minigame Plus Web.html" width="480" height="360" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen></iframe>
-</section>
+</div>
 
-<section id="google">
-  <h2>Google Search Test</h2>
-  <br>
-  <script async src="https://cse.google.com/cse.js?cx=04d1fd792166f4330">
-</script>
-<div class="gcse-searchbox"></div>
-</section>
+<div class="section-accordion" id="acc-clouds">
+  <button class="section-toggle" onclick="toggleSection('acc-clouds')" aria-expanded="false">
+    <h2>Clouds Minigame</h2>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="section-body">
+    <div class="section-content">
+ Kirby needs 10 stars to win. Idk what to say.
+    </div>
+    <br>
+    <iframe src="assets/media/Cloud Minigame Plus Web.html" width="480" height="360" allowtransparency="true" frameborder="0" scrolling="no" allowfullscreen></iframe>
+  </div>
+</div>
 
-<section id="draw">
-  <h2>Draw Something</h2>
+<div class="section-accordion" id="acc-draw">
+  <button class="section-toggle" onclick="toggleSection('acc-draw')" aria-expanded="false">
+    <h2>Draw Something</h2>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="section-body" style="padding-left: 20px; padding-right: 20px;">
 
   <div class="draw-container">
 
@@ -394,13 +464,31 @@ Here are some random fun stuffs you can do on my site. Everything is random here
     </div>
 
   </div>
-</section>
+
+  </div>
+</div>
 
 <footer>
   © 2026 sutee124.
 </footer>
 
 <script>
+// ===== ACCORDION TOGGLE =====
+function toggleSection(id) {
+  const acc = document.getElementById(id);
+  const isOpen = acc.classList.contains('open');
+  const btn = acc.querySelector('.section-toggle');
+
+  acc.classList.toggle('open', !isOpen);
+  btn.setAttribute('aria-expanded', String(!isOpen));
+}
+
+// Auto-open draw section if #draw is in the URL
+if (window.location.hash === '#draw') {
+  toggleSection('acc-draw');
+  document.getElementById('acc-draw').scrollIntoView({ behavior: 'smooth' });
+}
+
 const canvas = document.getElementById("board");
 const ctx = canvas.getContext("2d");
 
