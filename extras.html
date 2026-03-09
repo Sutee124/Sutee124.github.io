@@ -537,11 +537,22 @@ document.addEventListener("keydown", handleShortcuts);
 
 // ===== DRAWING =====
 
+function getCanvasPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  return {
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top) * scaleY
+  };
+}
+
 function startDraw(e) {
   drawing = true;
   hasUserDrawn = true;
-  startX = e.offsetX;
-  startY = e.offsetY;
+  const pos = getCanvasPos(e);
+  startX = pos.x;
+  startY = pos.y;
   ctx.beginPath();
 }
 
@@ -550,9 +561,10 @@ function stopDraw(e) {
   drawing = false;
 
   if (e.shiftKey) {
+    const pos = getCanvasPos(e);
     ctx.beginPath();
     ctx.moveTo(startX, startY);
-    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.lineTo(pos.x, pos.y);
     ctx.stroke();
   }
 
@@ -562,6 +574,7 @@ function stopDraw(e) {
 
 function draw(e) {
   if (!drawing || e.shiftKey) return;
+  const pos = getCanvasPos(e);
 
   ctx.lineWidth = brushSize;
   ctx.lineCap = "round";
@@ -573,23 +586,10 @@ function draw(e) {
     ctx.strokeStyle = currentColor;
   }
 
-  ctx.lineTo(e.offsetX, e.offsetY);
+  ctx.lineTo(pos.x, pos.y);
   ctx.stroke();
   ctx.beginPath();
-  ctx.moveTo(e.offsetX, e.offsetY);
-}
-
-// ===== CURSOR PREVIEW =====
-
-function moveCursor(e) {
-  cursorPreview.style.left = e.clientX + "px";
-  cursorPreview.style.top = e.clientY + "px";
-}
-
-function updateCursorPreview() {
-  cursorPreview.style.width = brushSize + "px";
-  cursorPreview.style.height = brushSize + "px";
-  cursorPreview.style.borderColor = currentColor;
+  ctx.moveTo(pos.x, pos.y);
 }
 
 // ===== TOOL CONTROLS =====
