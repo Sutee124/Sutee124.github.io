@@ -13,147 +13,419 @@
 <link rel="stylesheet" href="/assets/site/style.css">
 
 <style>
-
-#downloads {
-  padding: 80px 60px;
-  border-top: 1px solid #111;
+@font-face {
+  font-family: Imagine;
+  src: url(/assets/site/Imagine_Earth.ttf);
 }
 
-/* ===== SEARCH ===== */
+:root {
+  --red: #e8251a;
+  --red-dim: rgba(232,37,26,0.15);
+  --red-border: rgba(232,37,26,0.35);
+  --bg: #080808;
+  --surface: #0f0f0f;
+  --surface2: #161616;
+  --text: #e8e8e8;
+  --muted: #666;
+  --mono: 'Space Mono', monospace;
+  --sans: Imagine, sans-serif;
+}
 
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--mono);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--red); }
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 48px;
+  background: rgba(8,8,8,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.nav-logo {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--red);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.nav-logo img {
+  max-height: 22px;
+  display: block;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 36px;
+  align-items: center;
+}
+
+nav a:not(.nav-logo) {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+nav a:not(.nav-logo):hover { color: var(--text); }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  padding: 160px 48px 80px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(232,37,26,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,37,26,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at 0% 100%, black 20%, transparent 70%);
+}
+
+.page-header-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+}
+
+.page-eyebrow {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--red);
+}
+
+.page-header h1 {
+  font-family: var(--sans);
+  font-size: clamp(40px, 7vw, 90px);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -3px;
+  color: var(--text);
+  margin-bottom: 28px;
+}
+
+.page-header h1 span { color: var(--red); }
+
+.page-header p {
+  font-size: 12px;
+  line-height: 2;
+  color: var(--muted);
+  max-width: 480px;
+  margin-bottom: 10px;
+}
+
+.malware-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.malware-link:hover { opacity: 1; }
+
+.malware-link::before {
+  content: '!';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--red);
+  font-size: 9px;
+  border-radius: 50%;
+}
+
+/* ── DOWNLOADS SECTION ── */
+#downloads {
+  padding: 64px 48px 120px;
+}
+
+/* ── SEARCH ── */
 .search-box {
-  margin-bottom: 35px;
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.search-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
 }
 
 .search-wrapper {
   position: relative;
-  max-width: 420px;
+  flex: 1;
+  max-width: 400px;
 }
 
-/* clear search button */
+.search-wrapper input {
+  width: 100%;
+  padding: 12px 40px 12px 16px;
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-wrapper input:focus { border-color: var(--red); }
+.search-wrapper input::placeholder { color: var(--muted); }
 
 .clear-btn {
   position: absolute;
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #ff3b3b;
+  color: var(--red);
   font-size: 18px;
   cursor: pointer;
   display: none;
-  transition: 0.2s ease;
+  line-height: 1;
+  transition: opacity 0.2s;
+  background: none;
+  border: none;
+  padding: 0;
 }
 
-.clear-btn:hover {
-  color: #ff0000;
+.clear-btn:hover { opacity: 0.7; }
+
+.result-count {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  flex-shrink: 0;
 }
 
-/* ===== NO RESULTS MESSAGE ===== */
-
+/* ── NO RESULTS ── */
 .no-results {
   display: none;
-  margin: 25px 0;
-  color: #ff3b3b;
-  font-size: 18px;
-  text-shadow: 0 0 8px rgba(255,0,0,0.5);
-}
-
-.no-results.show {
-  display: block;
-}
-
-/* ===== DOWNLOAD GRID ===== */
-
-#downloads {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 22px;
-}
-
-/* ===== DOWNLOAD CARD ===== */
-
-.downloads-card {
-  background: #111;
-  border: 1px solid #222;
-  padding: 26px;
-  line-height: 1.7;
-
-  transition:
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-/* hover effect */
-
-.downloads-card:hover {
-  border-color: #ff3b3b;
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-}
-
-/* title */
-
-.downloads-card h3 {
-  color: #ff3b3b;
-  margin-bottom: 4px;
-}
-
-/* publisher */
-
-.downloads-card h4 {
-  font-size: 13px;
-  margin-bottom: 10px;
+  padding: 48px 0;
+  font-size: 12px;
+  color: var(--red);
+  letter-spacing: 2px;
+  text-transform: uppercase;
   opacity: 0.7;
 }
 
-/* publisher link */
+.no-results.show { display: block; }
+
+/* ── DOWNLOADS GRID ── */
+.downloads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* ── DOWNLOAD CARD ── */
+.downloads-card {
+  background: var(--bg);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.downloads-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--red);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.3s ease;
+}
+
+.downloads-card:hover { background: var(--surface); }
+.downloads-card:hover::before { transform: scaleY(1); }
+
+.card-num {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.downloads-card h3 {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.downloads-card h4 {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+  font-weight: 400;
+}
 
 .publisher-link {
-  color: #ff3b3b;
+  color: var(--red);
   text-decoration: none;
-  transition: 0.2s ease;
+  transition: opacity 0.2s;
 }
 
-.publisher-link:hover {
-  text-decoration: underline;
-}
-
-/* description */
+.publisher-link:hover { opacity: 0.7; }
 
 .downloads-card p {
-  font-size: 14px;
-  opacity: 0.85;
-  margin-bottom: 16px;
+  font-size: 11px;
+  line-height: 1.9;
+  color: var(--muted);
+  margin-bottom: 28px;
+  flex: 1;
 }
 
-/* ===== DOWNLOAD BUTTON ===== */
-
-.button2 {
-  display: inline-block;
-  padding: 8px 18px;
-  background: #ff3b3b;
-  color: #fff;
-  font-weight: bold;
+/* ── DOWNLOAD BUTTON ── */
+.btn-dl {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--red-dim);
+  border: 1px solid var(--red-border);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   text-decoration: none;
-  font-size: 13px;
-
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  align-self: flex-start;
+  transition: all 0.2s;
 }
 
-.button2:hover {
-  background: #ff0000;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255,0,0,0.4);
+.btn-dl::after {
+  content: '↓';
+  font-size: 12px;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+
+.btn-dl:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.btn-dl:hover::after {
+  transform: translateY(2px);
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 28px 48px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-copy {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ── REVEAL ANIMATION ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  nav { padding: 16px 24px; }
+  .page-header { padding: 120px 24px 60px; }
+  #downloads { padding: 48px 24px 80px; }
+  .search-box { gap: 12px; }
+  .search-label { display: none; }
+  footer { padding: 24px; }
 }
 </style>
-
 </head>
 <body>
 
+<!-- ── NAV (untouched) ── -->
 <nav>
   <a href="index.html" class="nav-logo">
     <img src="/assets/site/logo.png" alt="Sutee" onerror="this.style.display='none';this.parentElement.textContent='sutee.'">
@@ -166,112 +438,150 @@
   </ul>
 </nav>
 
-<section id="about">
-  <h2>Downloads</h2>
-  <div class="section-content">
- Here are the downloads. All softwares here are either mine or carefully selected by me.
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Free Software</div>
+    <h1>Down<span>loads</span></h1>
+    <p>All software here is either mine or carefully selected by me. Don't be surprised if you find older versions — I don't update daily. Grab the latest from the official site if you need it.</p>
+    <a href="mailto:sutee1241@outlook.com?subject=Possible%20Malware%20Found%20on%20Downloads%20Page&body=I%20believe%20I%20found%20a%20file%20that%20may%20be%20malicious.%0A%5BPlease%20list%20the%20file%20name(s)%20or%20link(s)%20below.%5D%0A%0A1.%0A2.%0A3.%0A%0AThank%20you." class="malware-link">Report malware</a>
   </div>
-  <br>
-    <div class="section-content">
- Don't be surprised if you see any outdated software here. I don't have time to update the apps everyday. Consider downloading from their official website if you want the latest version.
-  </div>
-  <a href="mailto:sutee1241@outlook.com?subject=Possible%20Malware%20Found%20on%20Downloads%20Page&body=I%20believe%20I%20found%20a%20file%20that%20may%20be%20malicious.%0A%5BPlease%20list%20the%20file%20name(s)%20or%20link(s)%20below.%5D%0A%0A1.%0A2.%0A3.%0A%0AThank%20you." class="publisher-link">Found Malware?</a>
-</section>
+</div>
 
+<!-- ── DOWNLOADS SECTION ── -->
 <section id="downloads">
-    <div class="search-box">
-      <div class="search-wrapper">
-        <input class="ama-input" type="text" id="searchInput" placeholder="Search...">
-        <span id="clearBtn" class="clear-btn">&times;</span>
-      </div>
+
+  <!-- Search bar (outside grid) -->
+  <div class="search-box">
+    <span class="search-label">Filter</span>
+    <div class="search-wrapper">
+      <input type="text" id="searchInput" placeholder="Search apps...">
+      <button id="clearBtn" class="clear-btn" aria-label="Clear search">&times;</button>
     </div>
-      <p id="noResults" class="no-results">No results found.</p>
-      <div class="downloads-card">
-      <h3>Everything</h3> <h4> By <a href="https://www.voidtools.com/" target="_blank" class="publisher-link">VoidTools</a></h4>
-      <p>Version 1.3.4. Everything is a lightweight Windows desktop search utility that instantly locates files and folders by name, displaying results in real time as you type.</p>
-      <a href="/apps/Everything.exe" target="_blank" class="button2">Download</a>
+    <span class="result-count" id="resultCount"></span>
+  </div>
+
+  <p id="noResults" class="no-results">// no results found.</p>
+
+  <!-- Grid -->
+  <div class="downloads-grid" id="downloadsGrid">
+
+    <div class="downloads-card reveal">
+      <div class="card-num">01</div>
+      <h3>Everything</h3>
+      <h4>By <a href="https://www.voidtools.com/" target="_blank" class="publisher-link">VoidTools</a> &mdash; v1.3.4</h4>
+      <p>Lightweight Windows desktop search that instantly locates files and folders by name, displaying results in real time as you type.</p>
+      <a href="/apps/Everything.exe" class="btn-dl">Download</a>
     </div>
-      <div class="downloads-card">
-      <h3>Roadkil's Unstoppable Copier</h3> <h4> By <a href="https://www.roadkil.net/" target="_blank" class="publisher-link">Roadkil</a></h4>
-      <p>Version 5.2.0. Unstoppable Copier can recover readable data from damaged disks. One of my favourite tools.</p>
-      <a href="/apps/UnstoppableCopier.exe" target="_blank" class="button2">Download</a>
+
+    <div class="downloads-card reveal">
+      <div class="card-num">02</div>
+      <h3>Unstoppable Copier</h3>
+      <h4>By <a href="https://www.roadkil.net/" target="_blank" class="publisher-link">Roadkil</a> &mdash; v5.2.0</h4>
+      <p>Recovers readable data from damaged disks. One of my favourite tools — genuinely saved me more than once.</p>
+      <a href="/apps/UnstoppableCopier.exe" class="btn-dl">Download</a>
     </div>
-      <div class="downloads-card">
-      <h3>AnyDesk</h3> <h4> By <a href="https://anydesk.com/" target="_blank" class="publisher-link">AnyDesk Software GmbH</a></h4>
-      <p>Version 9.5.6. AnyDesk is a lightweight remote desktop program that lets you securely access and control your another computer over the internet in real time.</p>
-      <a href="/apps/AnyDesk.exe" target="_blank" class="button2">Download</a>
+
+    <div class="downloads-card reveal">
+      <div class="card-num">03</div>
+      <h3>AnyDesk</h3>
+      <h4>By <a href="https://anydesk.com/" target="_blank" class="publisher-link">AnyDesk Software GmbH</a> &mdash; v9.5.6</h4>
+      <p>Lightweight remote desktop program that lets you securely access and control another computer over the internet in real time.</p>
+      <a href="/apps/AnyDesk.exe" class="btn-dl">Download</a>
     </div>
-     <div class="downloads-card">
-      <h3>GPU-Z</h3> <h4> By <a href="https://www.techpowerup.com/" target="_blank" class="publisher-link">TechPowerUp</a></h4>
-      <p>Version 2.57.0. GPU-Z is a free utility for Windows that shows detailed information about your graphics card. It is portable btw. </p>
-      <a href="/apps/GPU-Z.exe" target="_blank" class="button2">Download</a>
+
+    <div class="downloads-card reveal">
+      <div class="card-num">04</div>
+      <h3>GPU-Z</h3>
+      <h4>By <a href="https://www.techpowerup.com/" target="_blank" class="publisher-link">TechPowerUp</a> &mdash; v2.57.0</h4>
+      <p>Free portable utility that shows detailed information about your graphics card. No install needed.</p>
+      <a href="/apps/GPU-Z.exe" class="btn-dl">Download</a>
     </div>
-     <div class="downloads-card">
-      <h3>CPU-Z</h3> <h4> By <a href="https://www.cpuid.com/" target="_blank" class="publisher-link">CPUID</a></h4>
-      <p>Version 2.09.0. CPU-Z is a small and portable Windows utility that shows information about your computer’s CPU, motherboard, RAM, Chipset, etc.</p>
-      <a href="/apps/cpuz.exe" target="_blank" class="button2">Download</a>
+
+    <div class="downloads-card reveal">
+      <div class="card-num">05</div>
+      <h3>CPU-Z</h3>
+      <h4>By <a href="https://www.cpuid.com/" target="_blank" class="publisher-link">CPUID</a> &mdash; v2.09.0</h4>
+      <p>Small portable utility that surfaces detailed info about your CPU, motherboard, RAM, and chipset.</p>
+      <a href="/apps/cpuz.exe" class="btn-dl">Download</a>
     </div>
-     <div class="downloads-card">
-      <h3>Windhawk</h3> <h4>By <a href="https://ramensoftware.com/" target="_blank" class="publisher-link">Ramen Software</a></h4>
-      <p>Version 1.6.0. Windhawk is a literal Windows customization store. It's a free and open-source Windows customization tool that lets you modify how Windows behaves without permanently patching system files. Think of it as a marketplace of modern, safer version of old-school Windows tweaking tools. (omg this description is so long.)</p>
-      <a href="/apps/windhawk_setup.exe" target="_blank" class="button2">Download</a>
+
+    <div class="downloads-card reveal">
+      <div class="card-num">06</div>
+      <h3>Windhawk</h3>
+      <h4>By <a href="https://ramensoftware.com/" target="_blank" class="publisher-link">Ramen Software</a> &mdash; v1.6.0</h4>
+      <p>A free, open-source Windows customization store — mod how Windows behaves without permanently patching system files. Think of it as a safer, modern take on old-school tweaking tools.</p>
+      <a href="/apps/windhawk_setup.exe" class="btn-dl">Download</a>
     </div>
-     <div class="downloads-card">
-      <h3>Stupid Boiled Egg</h3> <h4>By <a href="https://guthib.com/" target="_blank" class="publisher-link">Hard-Boiled Egg Industries, ltd.</a></h4>
-      <p>Version 9.9.9. This is a useless app that shows you the message "boiled egg". Nothing special.</p>
-      <a href="/apps/boiled egg.exe" target="_blank" class="button2">Download</a>
+
+    <div class="downloads-card reveal">
+      <div class="card-num">07</div>
+      <h3>Stupid Boiled Egg</h3>
+      <h4>By <a href="https://guthib.com/" target="_blank" class="publisher-link">Hard-Boiled Egg Industries, ltd.</a> &mdash; v9.9.9</h4>
+      <p>Displays the message "boiled egg". That's it. Nothing more, nothing less.</p>
+      <a href="/apps/boiled egg.exe" class="btn-dl">Download</a>
     </div>
+
+  </div>
 </section>
 
+<!-- ── FOOTER (untouched) ── -->
 <footer>
   <span class="footer-copy">© 2026 sutee124</span>
 </footer>
 
 <script>
-const searchInput = document.getElementById("searchInput");
-const cards = document.querySelectorAll(".downloads-card");
-const noResults = document.getElementById("noResults");
-const clearBtn = document.getElementById("clearBtn");
+// ── SEARCH ──
+const searchInput  = document.getElementById('searchInput');
+const clearBtn     = document.getElementById('clearBtn');
+const noResults    = document.getElementById('noResults');
+const resultCount  = document.getElementById('resultCount');
+const cards        = document.querySelectorAll('.downloads-card');
+const total        = cards.length;
 
 function filterCards() {
-  const filter = searchInput.value.toLowerCase();
-  let visibleCount = 0;
+  const q = searchInput.value.toLowerCase().trim();
+  let visible = 0;
 
   cards.forEach(card => {
-    const text = card.innerText.toLowerCase();
-    const matches = text.includes(filter);
-
-    if (matches) {
-      card.style.display = "block";
-      requestAnimationFrame(() => {
-        card.style.opacity = "1";
-        card.style.transform = "translateY(0)";
-      });
-      visibleCount++;
+    const match = card.innerText.toLowerCase().includes(q);
+    if (match) {
+      card.style.display = 'flex';
+      visible++;
     } else {
-      card.style.opacity = "0";
-      card.style.transform = "translateY(10px)";
-      setTimeout(() => {
-        card.style.display = "none";
-      }, 200);
+      card.style.display = 'none';
     }
   });
 
-  if (visibleCount === 0 && filter !== "") {
-    noResults.classList.add("show");
-  } else {
-    noResults.classList.remove("show");
-  }
-
-  clearBtn.style.display = filter ? "block" : "none";
+  noResults.classList.toggle('show', visible === 0 && q !== '');
+  clearBtn.style.display = q ? 'block' : 'none';
+  resultCount.textContent = q ? `${visible} / ${total}` : `${total} apps`;
 }
 
-searchInput.addEventListener("input", filterCards);
+searchInput.addEventListener('input', filterCards);
 
-clearBtn.addEventListener("click", function () {
-  searchInput.value = "";
+clearBtn.addEventListener('click', () => {
+  searchInput.value = '';
   filterCards();
   searchInput.focus();
+});
+
+// set initial count
+resultCount.textContent = `${total} apps`;
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach((el, i) => {
+  el.style.transitionDelay = `${i * 60}ms`;
+  observer.observe(el);
 });
 </script>
 

@@ -6,218 +6,496 @@
 <title>sutee's extras</title>
 <link rel="icon" type="image/png+xml" href="/assets/site/favicon.png">
 
-<!--style stuff-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site/style.css">
 
 <style>
-/* ===== EXTRAS INTRO ===== */
-
-#top {
-  padding: 80px 60px;
-  border-top: 1px solid #111;
+@font-face {
+  font-family: Imagine;
+  src: url(/assets/site/Imagine_Earth.ttf);
 }
 
-#top h2 {
-  color: #ff3b3b;
+:root {
+  --red: #e8251a;
+  --red-dim: rgba(232,37,26,0.15);
+  --red-border: rgba(232,37,26,0.35);
+  --bg: #080808;
+  --surface: #0f0f0f;
+  --surface2: #161616;
+  --text: #e8e8e8;
+  --muted: #666;
+  --mono: 'Space Mono', monospace;
+  --sans: Imagine, sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--mono);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* NOISE */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--red); }
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 48px;
+  background: rgba(8,8,8,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.nav-logo {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--red);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.nav-logo img { max-height: 22px; display: block; }
+
+nav ul { list-style: none; display: flex; gap: 36px; align-items: center; }
+
+nav a:not(.nav-logo) {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+nav a:not(.nav-logo):hover { color: var(--text); }
+
+/* PAGE HEADER */
+.page-header {
+  padding: 160px 48px 80px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(232,37,26,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,37,26,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at 0% 100%, black 20%, transparent 70%);
+}
+
+.page-header-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+}
+
+.page-eyebrow {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--red);
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.section-content {
-  max-width: 800px;
-  line-height: 1.6;
-  opacity: 0.85;
+.page-eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--red);
 }
 
-/* ===== ACCORDION ===== */
+.page-header h1 {
+  font-family: var(--sans);
+  font-size: clamp(40px, 7vw, 90px);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -3px;
+  color: var(--text);
+  margin-bottom: 28px;
+}
 
+.page-header h1 span { color: var(--red); }
+
+.page-header p {
+  font-size: 12px;
+  line-height: 2;
+  color: var(--muted);
+  max-width: 520px;
+  margin-bottom: 6px;
+}
+
+/* JUMP BUTTONS */
+.section-index {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.index-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.index-btn:hover {
+  background: var(--red-dim);
+  border-color: var(--red-border);
+  color: var(--text);
+}
+
+/* ACCORDION WRAPPER */
+.extras-sections {
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+/* ACCORDION ITEM */
 .section-accordion {
-  border-top: 1px solid #111;
-  transition: background 0.2s ease;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 
+/* TOGGLE BUTTON */
 .section-toggle {
   width: 100%;
   background: none;
   border: none;
-  color: #fff;
-  font-family: Imagine, Tahoma, sans-serif;
-  font-size: 16px;
-
-  padding: 26px 60px;
-
+  color: var(--text);
+  font-family: var(--mono);
+  padding: 28px 48px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   cursor: pointer;
   text-align: left;
-
-  transition: background 0.2s ease;
+  transition: background 0.2s;
+  gap: 24px;
 }
 
 .section-toggle:hover {
-  background: rgba(255,59,59,0.08);
+  background: rgba(232,37,26,0.04);
 }
 
-.section-toggle h2 {
-  color: #ff3b3b;
+.toggle-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.toggle-num {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.toggle-title {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--text);
+  line-height: 1;
+}
+
+.toggle-tag {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 4px 10px;
 }
 
 .arrow {
-  color: #ff3b3b;
-  font-size: 18px;
-  transition: transform 0.3s ease;
+  color: var(--red);
+  font-size: 11px;
+  transition: transform 0.35s ease;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .section-accordion.open .arrow {
   transform: rotate(180deg);
 }
 
-/* ===== COLLAPSIBLE BODY ===== */
-
+/* ACCORDION BODY */
 .section-body {
   overflow: hidden;
   max-height: 0;
-  transition: max-height 0.45s ease, padding 0.3s ease;
-  padding: 0 60px;
+  transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
 }
 
 .section-accordion.open .section-body {
-  max-height: 2000px;
-  padding: 0 60px 50px;
+  max-height: 3000px;
 }
 
-/* ===== DRAW TOOL ===== */
+.section-body-inner {
+  padding: 0 48px 48px;
+}
 
+/* MUSIC */
+.music-frame {
+  border: 1px solid rgba(255,255,255,0.06);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.music-frame iframe {
+  display: block;
+  width: 100%;
+  height: 500px;
+  border: none;
+}
+
+/* GAME */
+.game-wrapper { display: flex; flex-direction: column; gap: 16px; }
+
+.game-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.game-desc::before { content: '// '; color: var(--red); }
+
+.game-frame-container {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 4/3;
+  border: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+.game-frame-container iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* DRAW TOOL */
 .draw-container {
-  max-width: 1000px;
-  margin: auto;
-  background: #111;
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid #222;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
 }
-
-/* toolbar */
 
 .toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 18px;
-  align-items: center;
-  margin-bottom: 20px;
+  align-items: stretch;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .tool-group {
   display: flex;
   align-items: center;
   gap: 10px;
+  padding: 14px 20px;
+  border-right: 1px solid rgba(255,255,255,0.06);
 }
+
+.tool-group:last-child { border-right: none; flex-wrap: wrap; }
 
 .tool-group label {
-  font-size: 13px;
-  opacity: 0.7;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
 }
-
-/* brush preview */
 
 #brushPreview {
   border-radius: 50%;
-  background: black;
+  background: #000;
+  flex-shrink: 0;
+  transition: all 0.15s;
 }
 
-/* buttons */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  outline: none;
+  cursor: pointer;
+  width: 80px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--red);
+  cursor: pointer;
+}
+
+input[type="color"] {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: none;
+  cursor: pointer;
+  padding: 2px;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+input[type="color"]::-webkit-color-swatch { border: none; }
 
 .tool-btn {
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: 1px solid #222;
-
-  background: #181818;
-  color: #fff;
-
+  padding: 7px 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   cursor: pointer;
-
-  transition: 
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.15s ease;
+  transition: all 0.15s;
+  white-space: nowrap;
 }
 
 .tool-btn:hover {
-  background: #222;
-  border-color: #ff3b3b;
-}
-
-.tool-btn.primary {
-  background: #ff3b3b;
-  border-color: #ff3b3b;
-}
-
-.tool-btn.primary:hover {
-  background: #ff0000;
-}
-
-.tool-btn.danger {
-  background: #7f0000;
-  border-color: #7f0000;
-}
-
-.tool-btn.danger:hover {
-  background: #b00000;
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.15);
+  color: var(--text);
 }
 
 .tool-btn.active {
-  background: #ff9800;
+  background: rgba(255,152,0,0.12);
+  border-color: rgba(255,152,0,0.35);
+  color: #ff9800;
 }
 
-/* ===== CANVAS ===== */
+.tool-btn.danger {
+  border-color: rgba(232,37,26,0.25);
+  color: rgba(232,37,26,0.5);
+}
+
+.tool-btn.danger:hover {
+  background: rgba(232,37,26,0.1);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.tool-btn.primary {
+  background: var(--red-dim);
+  border-color: var(--red-border);
+  color: var(--text);
+}
+
+.tool-btn.primary:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
 
 .canvas-wrapper {
   position: relative;
   display: flex;
   justify-content: center;
+  background: #fff;
 }
 
 canvas {
-  background: white;
-  border-radius: 12px;
+  display: block;
   width: 100%;
   max-width: 900px;
+  cursor: crosshair;
 }
-
-/* ===== CURSOR PREVIEW ===== */
 
 #cursorPreview {
   position: fixed;
-  border: 1px solid white;
+  border: 1.5px solid rgba(255,255,255,0.8);
   border-radius: 50%;
   pointer-events: none;
   transform: translate(-50%, -50%);
   display: none;
+  mix-blend-mode: difference;
+  z-index: 9998;
 }
 
-/* ===== INPUTS ===== */
-
-input[type="range"],
-input[type="color"] {
-  cursor: pointer;
+/* FOOTER */
+footer {
+  padding: 28px 48px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
-/* ===== GAME FRAME ===== */
+.footer-copy {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
 
-iframe {
-  border-radius: 10px;
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav { padding: 16px 24px; }
+  .page-header { padding: 120px 24px 60px; }
+  .section-toggle { padding: 22px 24px; }
+  .section-body-inner { padding: 0 24px 36px; }
+  .tool-group { padding: 10px 12px; }
+  .toggle-tag { display: none; }
+  footer { padding: 24px; }
 }
 </style>
 </head>
-
 <body>
 
+<!-- NAV (untouched) -->
 <nav>
   <a href="index.html" class="nav-logo">
     <img src="/assets/site/logo.png" alt="Sutee" onerror="this.style.display='none';this.parentElement.textContent='sutee.'">
@@ -230,336 +508,255 @@ iframe {
   </ul>
 </nav>
 
-<section id="top">
-  <h2>Extras</h2>
-    <div class="section-content">
-Here are some random fun stuffs you can do on my site. Everything is random here.
-  </div>
-  <br>
-  <div class="section-content">
- Came from my abandoned StrawPage? You can also draw in the canvas. (like the strawpage picasso gimmicks thing.)
-  </div>
-</section>
-
-<!--section id="pig">
-  <h2>pig</h2>  
-  <iframe width="110" height="200" src="https://www.myinstants.com/instant/sqeeling-pig/embed/" frameborder="0" scrolling="no"></iframe>
-</section-->
-
-<div class="section-accordion" id="acc-player">
-  <button class="section-toggle" onclick="toggleSection('acc-player')" aria-expanded="false">
-    <h2>Music Zone</h2>
-    <span class="arrow">▼</span>
-  </button>
-  <div class="section-body">
-    <iframe src="/assets/media/player.html" width="100%" height="500" style="border:none;" allow="autoplay"></iframe>
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Miscellaneous</div>
+    <h1>Ex<span>tras</span></h1>
+    <p>Random fun stuff you can do on my site. No theme, no coherent plan.</p>
+    <p>Came from my old StrawPage looking for the canvas? It's still here.</p>
+    <div class="section-index">
+      <button class="index-btn" onclick="openAndScroll('acc-player')">♪ Music Zone</button>
+      <button class="index-btn" onclick="openAndScroll('acc-clouds')">☁ Clouds Minigame</button>
+      <button class="index-btn" onclick="openAndScroll('acc-draw')">✏ Draw Something</button>
+    </div>
   </div>
 </div>
 
-<div class="section-accordion" id="acc-clouds">
-  <button class="section-toggle" onclick="toggleSection('acc-clouds')" aria-expanded="false">
-    <h2>Clouds Minigame</h2>
-    <span class="arrow">▼</span>
-  </button>
-  <div class="section-body">
-    <div class="section-content">
- Kirby needs 10 stars to win. Idk what to say.
+<!-- SECTIONS -->
+<div class="extras-sections">
+
+  <!-- MUSIC ZONE -->
+  <div class="section-accordion" id="acc-player">
+    <button class="section-toggle" onclick="toggleSection('acc-player')" aria-expanded="false">
+      <div class="toggle-left">
+        <span class="toggle-num">01</span>
+        <span class="toggle-title">Music Zone</span>
+        <span class="toggle-tag">Audio</span>
+      </div>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <div class="music-frame">
+          <iframe src="/assets/media/player.html" allow="autoplay"></iframe>
+        </div>
+      </div>
     </div>
-    <br>
-  <div style="position: relative; width: 100%; max-width: 480px; aspect-ratio: 4/3;">
-    <iframe
-      src="assets/media/Cloud Minigame Plus Web.html"
-      allowtransparency="true"
-      frameborder="0"
-      scrolling="no"
-      allowfullscreen
-      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;">
-    </iframe>
   </div>
+
+  <!-- CLOUDS MINIGAME -->
+  <div class="section-accordion" id="acc-clouds">
+    <button class="section-toggle" onclick="toggleSection('acc-clouds')" aria-expanded="false">
+      <div class="toggle-left">
+        <span class="toggle-num">02</span>
+        <span class="toggle-title">Clouds Minigame</span>
+        <span class="toggle-tag">Game</span>
+      </div>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <div class="game-wrapper">
+          <p class="game-desc">Kirby needs 10 stars to win. Idk what to say.</p>
+          <div class="game-frame-container">
+            <iframe
+              src="assets/media/Cloud Minigame Plus Web.html"
+              allowtransparency="true"
+              scrolling="no"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <!-- DRAW SOMETHING -->
+  <div class="section-accordion" id="acc-draw">
+    <button class="section-toggle" onclick="toggleSection('acc-draw')" aria-expanded="false">
+      <div class="toggle-left">
+        <span class="toggle-num">03</span>
+        <span class="toggle-title">Draw Something</span>
+        <span class="toggle-tag">Canvas</span>
+      </div>
+      <span class="arrow">▼</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <div class="draw-container">
+
+          <div class="toolbar">
+            <div class="tool-group">
+              <label>Color</label>
+              <input type="color" id="colorPicker" value="#000000">
+            </div>
+            <div class="tool-group">
+              <label>Size</label>
+              <input type="range" id="brushSize" min="1" max="50" value="5">
+              <div id="brushPreview"></div>
+            </div>
+            <div class="tool-group">
+              <button class="tool-btn" id="eraserBtn" onclick="toggleEraser()">Eraser</button>
+              <button class="tool-btn" onclick="undo()">Undo</button>
+              <button class="tool-btn" onclick="redo()">Redo</button>
+              <button class="tool-btn danger" onclick="clearCanvas()">Clear</button>
+              <button class="tool-btn primary" onclick="saveDrawing()">Save PNG</button>
+            </div>
+          </div>
+
+          <div class="canvas-wrapper">
+            <canvas id="board" width="900" height="500"></canvas>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<div class="section-accordion" id="acc-draw">
-  <button class="section-toggle" onclick="toggleSection('acc-draw')" aria-expanded="false">
-    <h2>Draw Something</h2>
-    <span class="arrow">▼</span>
-  </button>
-  <div class="section-body" style="padding-left: 20px; padding-right: 20px;">
-
-  <div class="draw-container">
-
-    <!-- TOOLBAR -->
-    <div class="toolbar">
-
-      <div class="tool-group">
-        <label>Color</label>
-        <input type="color" id="colorPicker" value="#000000">
-      </div>
-
-      <div class="tool-group">
-        <label>Size</label>
-        <input type="range" id="brushSize" min="1" max="50" value="5">
-        <div id="brushPreview"></div>
-      </div>
-
-      <div class="tool-group buttons">
-        <button class="tool-btn" id="eraserBtn" onclick="toggleEraser()">Eraser</button>
-        <button class="tool-btn" onclick="undo()">Undo</button>
-        <button class="tool-btn" onclick="redo()">Redo</button>
-        <button class="tool-btn danger" onclick="clearCanvas()">Clear</button>
-        <button class="tool-btn primary" onclick="saveDrawing()">Save PNG</button>
-      </div>
-
-    </div>
-
-    <!-- CANVAS AREA -->
-    <div class="canvas-wrapper">
-      <canvas id="board" width="900" height="500"></canvas>
-      <div id="cursorPreview"></div>
-    </div>
-
-  </div>
-
-  </div>
-</div>
-
+<!-- FOOTER (untouched) -->
 <footer>
   <span class="footer-copy">© 2026 sutee124</span>
 </footer>
 
+<div id="cursorPreview"></div>
+
 <script>
-// ===== ACCORDION TOGGLE =====
+// ACCORDION
 function toggleSection(id) {
   const acc = document.getElementById(id);
-  const isOpen = acc.classList.contains('open');
-  const btn = acc.querySelector('.section-toggle');
-
-  acc.classList.toggle('open', !isOpen);
-  btn.setAttribute('aria-expanded', String(!isOpen));
+  const open = acc.classList.contains('open');
+  acc.classList.toggle('open', !open);
+  acc.querySelector('.section-toggle').setAttribute('aria-expanded', String(!open));
 }
 
-// Auto-open draw section if #draw is in the URL
-if (window.location.hash === '#draw') {
-  toggleSection('acc-draw');
-  document.getElementById('acc-draw').scrollIntoView({ behavior: 'smooth' });
+function openAndScroll(id) {
+  const acc = document.getElementById(id);
+  if (!acc.classList.contains('open')) toggleSection(id);
+  setTimeout(() => acc.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
 }
 
-const canvas = document.getElementById("board");
-const ctx = canvas.getContext("2d");
+if (window.location.hash === '#draw') openAndScroll('acc-draw');
 
-const colorPicker = document.getElementById("colorPicker");
-const brushSizeSlider = document.getElementById("brushSize");
-const brushPreview = document.getElementById("brushPreview");
-const cursorPreview = document.getElementById("cursorPreview");
+// CANVAS
+const canvas  = document.getElementById('board');
+const ctx     = canvas.getContext('2d');
+const colorPicker     = document.getElementById('colorPicker');
+const brushSizeSlider = document.getElementById('brushSize');
+const brushPreview    = document.getElementById('brushPreview');
+const cursorPreview   = document.getElementById('cursorPreview');
 
-let drawing = false;
-let currentColor = "#000000";
-let brushSize = 5;
-let erasing = false;
-let isDirty = false;
-let hasUserDrawn = false;
+let drawing = false, currentColor = '#000000', brushSize = 5;
+let erasing = false, isDirty = false, hasUserDrawn = false;
+let startX = 0, startY = 0;
+let history = [], historyStep = -1;
 
-let startX = 0;
-let startY = 0;
+updateBrushPreview(); updateCursorPreview(); saveState(false);
 
-let history = [];
-let historyStep = -1;
-
-// ===== INITIAL SETUP =====
-updateBrushPreview();
-updateCursorPreview();
-saveState(false);
-
-// ===== EVENTS =====
-canvas.addEventListener("mousedown", startDraw);
-canvas.addEventListener("mouseup", stopDraw);
-canvas.addEventListener("mouseout", stopDraw);
-canvas.addEventListener("mousemove", draw);
-
-canvas.addEventListener("mousemove", moveCursor);
-canvas.addEventListener("mouseenter", () => cursorPreview.style.display = "block");
-canvas.addEventListener("mouseleave", () => cursorPreview.style.display = "none");
-
-document.addEventListener("keydown", handleShortcuts);
-
-// ===== DRAWING =====
+canvas.addEventListener('mousedown', startDraw);
+canvas.addEventListener('mouseup',   stopDraw);
+canvas.addEventListener('mouseout',  stopDraw);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mousemove', e => {
+  cursorPreview.style.left = e.clientX + 'px';
+  cursorPreview.style.top  = e.clientY + 'px';
+});
+canvas.addEventListener('mouseenter', () => cursorPreview.style.display = 'block');
+canvas.addEventListener('mouseleave', () => cursorPreview.style.display = 'none');
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
+  if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
+});
 
 function getCanvasPos(e) {
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
+  const r = canvas.getBoundingClientRect();
   return {
-    x: (e.clientX - rect.left) * scaleX,
-    y: (e.clientY - rect.top) * scaleY
+    x: (e.clientX - r.left) * (canvas.width  / r.width),
+    y: (e.clientY - r.top)  * (canvas.height / r.height)
   };
 }
 
 function startDraw(e) {
-  drawing = true;
-  hasUserDrawn = true;
-  const pos = getCanvasPos(e);
-  startX = pos.x;
-  startY = pos.y;
+  drawing = true; hasUserDrawn = true;
+  const p = getCanvasPos(e); startX = p.x; startY = p.y;
   ctx.beginPath();
 }
 
 function stopDraw(e) {
-  if (!drawing) return;
-  drawing = false;
-
+  if (!drawing) return; drawing = false;
   if (e.shiftKey) {
-    const pos = getCanvasPos(e);
-    ctx.beginPath();
-    ctx.moveTo(startX, startY);
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
+    const p = getCanvasPos(e);
+    ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(p.x, p.y); ctx.stroke();
   }
-
-  ctx.beginPath();
-  saveState();
+  ctx.beginPath(); saveState();
 }
 
 function draw(e) {
   if (!drawing || e.shiftKey) return;
-  const pos = getCanvasPos(e);
-
-  ctx.lineWidth = brushSize;
-  ctx.lineCap = "round";
-
-  if (erasing) {
-    ctx.globalCompositeOperation = "destination-out";
-  } else {
-    ctx.globalCompositeOperation = "source-over";
-    ctx.strokeStyle = currentColor;
-  }
-
-  ctx.lineTo(pos.x, pos.y);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(pos.x, pos.y);
+  const p = getCanvasPos(e);
+  ctx.lineWidth = brushSize; ctx.lineCap = 'round';
+  ctx.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
+  if (!erasing) ctx.strokeStyle = currentColor;
+  ctx.lineTo(p.x, p.y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(p.x, p.y);
 }
 
-// ===== CURSOR PREVIEW =====
-
-function moveCursor(e) {
-  cursorPreview.style.left = e.clientX + "px";
-  cursorPreview.style.top = e.clientY + "px";
-}
-
-function updateCursorPreview() {
-  cursorPreview.style.width = brushSize + "px";
-  cursorPreview.style.height = brushSize + "px";
-  cursorPreview.style.borderColor = currentColor;
-}
-
-// ===== TOOL CONTROLS =====
-
-colorPicker.addEventListener("input", function() {
-  currentColor = this.value;
-  erasing = false;
-  updateBrushPreview();
-  updateCursorPreview();
+colorPicker.addEventListener('input', function() {
+  currentColor = this.value; erasing = false;
+  updateBrushPreview(); updateCursorPreview(); updateEraserBtn();
 });
 
-brushSizeSlider.addEventListener("input", function() {
-  brushSize = this.value;
-  updateBrushPreview();
-  updateCursorPreview();
+brushSizeSlider.addEventListener('input', function() {
+  brushSize = this.value; updateBrushPreview(); updateCursorPreview();
 });
 
-function toggleEraser() {
-  erasing = !erasing;
+function toggleEraser() { erasing = !erasing; updateEraserBtn(); }
 
-  const btn = document.getElementById("eraserBtn");
-
-  if (erasing) {
-    btn.textContent = "Pen";
-    btn.classList.add("active");
-  } else {
-    btn.textContent = "Eraser";
-    btn.classList.remove("active");
-  }
+function updateEraserBtn() {
+  const btn = document.getElementById('eraserBtn');
+  btn.textContent = erasing ? 'Pen' : 'Eraser';
+  btn.classList.toggle('active', erasing);
 }
 
-function clearCanvas() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  saveState();
-}
-
-// ===== SAVE PNG =====
+function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); saveState(); }
 
 function saveDrawing() {
-  const link = document.createElement("a");
-  link.download = "drawing.png";
-  link.href = canvas.toDataURL("image/png");
-  link.click();
-  isDirty = false; // reset after saving
+  const a = document.createElement('a');
+  a.download = 'drawing.png'; a.href = canvas.toDataURL(); a.click();
+  isDirty = false;
 }
-
-// ===== UNDO / REDO =====
 
 function saveState(markDirty = true) {
   historyStep++;
-  if (historyStep < history.length) {
-    history.length = historyStep;
-  }
-
+  if (historyStep < history.length) history.length = historyStep;
   history.push(canvas.toDataURL());
-
-  if (markDirty) {
-    isDirty = true;
-  }
+  if (markDirty) isDirty = true;
 }
 
-function undo() {
-  if (historyStep > 0) {
-    historyStep--;
-    let img = new Image();
-    img.src = history[historyStep];
-    img.onload = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0);
-    };
-  }
+function restoreState(step) {
+  const img = new Image(); img.src = history[step];
+  img.onload = () => { ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.drawImage(img, 0, 0); };
 }
 
-function redo() {
-  if (historyStep < history.length - 1) {
-    historyStep++;
-    let img = new Image();
-    img.src = history[historyStep];
-    img.onload = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0);
-    };
-  }
-}
-
-// Keyboard shortcuts
-function handleShortcuts(e) {
-  if (e.ctrlKey && e.key === "z") {
-    e.preventDefault();
-    undo();
-  }
-  if (e.ctrlKey && e.key === "y") {
-    e.preventDefault();
-    redo();
-  }
-}
-
-// ===== BRUSH PREVIEW BOX =====
+function undo() { if (historyStep > 0) restoreState(--historyStep); }
+function redo() { if (historyStep < history.length - 1) restoreState(++historyStep); }
 
 function updateBrushPreview() {
-  brushPreview.style.width = brushSize + "px";
-  brushPreview.style.height = brushSize + "px";
-  brushPreview.style.background = currentColor;
+  const s = Math.max(6, Math.min(+brushSize, 32));
+  brushPreview.style.cssText = `width:${s}px;height:${s}px;background:${currentColor}`;
 }
 
-window.addEventListener("beforeunload", function (e) {
-  if (!isDirty || !hasUserDrawn) return;
+function updateCursorPreview() {
+  cursorPreview.style.width  = brushSize + 'px';
+  cursorPreview.style.height = brushSize + 'px';
+  cursorPreview.style.borderColor = currentColor;
+}
 
-  e.preventDefault();
-  e.returnValue = "";
+window.addEventListener('beforeunload', e => {
+  if (!isDirty || !hasUserDrawn) return;
+  e.preventDefault(); e.returnValue = '';
 });
 </script>
 
