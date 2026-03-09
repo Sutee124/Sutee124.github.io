@@ -97,29 +97,6 @@ body {
   box-shadow: 0 8px 24px rgba(0,0,0,0.6);
 }
 
-/* Spinning ring when playing */
-.album-ring {
-  position: absolute;
-  inset: -5px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  border-top-color: var(--red);
-  border-right-color: var(--red-glow);
-  opacity: 0;
-  transition: opacity 0.4s;
-  pointer-events: none;
-  animation: spin 2.5s linear infinite paused;
-}
-
-body.playing .album-ring {
-  opacity: 1;
-  animation-play-state: running;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
 .meta {
   flex: 1;
   padding-top: 4px;
@@ -128,17 +105,16 @@ body.playing .album-ring {
 .track-title {
   font-family: 'Open Sans', sans-serif;
   font-size: 22px;
-  letter-spacing: 0.04em;
   line-height: 1.1;
   margin-bottom: 6px;
   color: #fff;
 }
 
 .track-sub {
+  font-family: 'Open Sans', sans-serif;
   font-size: 12px;
   color: var(--muted);
   font-weight: 300;
-  letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 1.5;
 }
@@ -337,7 +313,6 @@ body.playing .album-ring {
   <div class="top-row">
     <div class="album-wrap">
       <img src="player/Combat Initiation - Cogito Ergo Sum ~ Conviction.png" alt="Album Cover" class="album-art">
-      <div class="album-ring"></div>
     </div>
     <div class="meta">
       <div class="track-title">Cogito Ergo Sum ~ Conviction</div>
