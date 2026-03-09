@@ -539,11 +539,9 @@ document.addEventListener("keydown", handleShortcuts);
 
 function getCanvasPos(e) {
   const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
   return {
-    x: (e.clientX - rect.left) * scaleX,
-    y: (e.clientY - rect.top) * scaleY
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top
   };
 }
 
@@ -590,6 +588,19 @@ function draw(e) {
   ctx.stroke();
   ctx.beginPath();
   ctx.moveTo(pos.x, pos.y);
+}
+
+// ===== CURSOR PREVIEW =====
+
+function moveCursor(e) {
+  cursorPreview.style.left = e.clientX + "px";
+  cursorPreview.style.top = e.clientY + "px";
+}
+
+function updateCursorPreview() {
+  cursorPreview.style.width = brushSize + "px";
+  cursorPreview.style.height = brushSize + "px";
+  cursorPreview.style.borderColor = currentColor;
 }
 
 // ===== TOOL CONTROLS =====
