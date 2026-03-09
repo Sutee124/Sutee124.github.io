@@ -12,23 +12,161 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site/style.css">
 
+<style>
+
+#downloads {
+  padding: 80px 60px;
+  border-top: 1px solid #111;
+}
+
+/* ===== SEARCH ===== */
+
+.search-box {
+  margin-bottom: 35px;
+}
+
+.search-wrapper {
+  position: relative;
+  max-width: 420px;
+}
+
+/* clear search button */
+
+.clear-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ff3b3b;
+  font-size: 18px;
+  cursor: pointer;
+  display: none;
+  transition: 0.2s ease;
+}
+
+.clear-btn:hover {
+  color: #ff0000;
+}
+
+/* ===== NO RESULTS MESSAGE ===== */
+
+.no-results {
+  display: none;
+  margin: 25px 0;
+  color: #ff3b3b;
+  font-size: 18px;
+  text-shadow: 0 0 8px rgba(255,0,0,0.5);
+}
+
+.no-results.show {
+  display: block;
+}
+
+/* ===== DOWNLOAD GRID ===== */
+
+#downloads {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+/* ===== DOWNLOAD CARD ===== */
+
+.downloads-card {
+  background: #111;
+  border: 1px solid #222;
+  padding: 26px;
+  line-height: 1.7;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* hover effect */
+
+.downloads-card:hover {
+  border-color: #ff3b3b;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+/* title */
+
+.downloads-card h3 {
+  color: #ff3b3b;
+  margin-bottom: 4px;
+}
+
+/* publisher */
+
+.downloads-card h4 {
+  font-size: 13px;
+  margin-bottom: 10px;
+  opacity: 0.7;
+}
+
+/* publisher link */
+
+.publisher-link {
+  color: #ff3b3b;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.publisher-link:hover {
+  text-decoration: underline;
+}
+
+/* description */
+
+.downloads-card p {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 16px;
+}
+
+/* ===== DOWNLOAD BUTTON ===== */
+
+.button2 {
+  display: inline-block;
+  padding: 8px 18px;
+  background: #ff3b3b;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 13px;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.button2:hover {
+  background: #ff0000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255,0,0,0.4);
+}
+</style>
 
 </head>
 <body>
 
 <nav>
-  <a href="https://sutee124.github.io" class="logo">
-    <img src="/assets/site/logo.png" alt="Sutee">
+  <a href="index.html" class="nav-logo">
+    <img src="/assets/site/logo.png" alt="Sutee" onerror="this.style.display='none';this.parentElement.textContent='sutee.'">
   </a>
   <ul>
-    <li><a href="sutee124.github.io#about">About</a></li>
+    <li><a href="#about">About</a></li>
     <li><a href="downloads">Downloads</a></li>
-    <li><a href="sutee124.github.io#projects">Projects</a></li>
-    <li><a href="sutee124.github.io#contact">Contact</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
 
-<section id="about">
+<section id="about" class="section reveal">
   <h2>Downloads</h2>
   <div class="section-content">
  Here are the downloads. All softwares here are either mine or carefully selected by me.
@@ -40,10 +178,10 @@
   <a href="mailto:sutee1241@outlook.com?subject=Possible%20Malware%20Found%20on%20Downloads%20Page&body=I%20believe%20I%20found%20a%20file%20that%20may%20be%20malicious.%0A%5BPlease%20list%20the%20file%20name(s)%20or%20link(s)%20below.%5D%0A%0A1.%0A2.%0A3.%0A%0AThank%20you." class="publisher-link">Found Malware?</a>
 </section>
 
-<section id="downloads">
+<section id="downloads" class="section reveal">
     <div class="search-box">
       <div class="search-wrapper">
-        <input type="text" id="searchInput" placeholder="Search...">
+        <input class="ama-input" type="text" id="searchInput" placeholder="Search...">
         <span id="clearBtn" class="clear-btn">&times;</span>
       </div>
     </div>
@@ -86,7 +224,7 @@
 </section>
 
 <footer>
-  © 2026 sutee124.
+  <span class="footer-copy">© 2026 sutee124</span>
 </footer>
 
 <script>

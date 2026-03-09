@@ -13,10 +13,84 @@
 <link rel="stylesheet" href="/assets/site/style.css">
 
 <style>
+/* ===== EXTRAS INTRO ===== */
 
-#draw {
-  padding: 40px 20px;
+#top {
+  padding: 80px 60px;
+  border-top: 1px solid #111;
 }
+
+#top h2 {
+  color: #ff3b3b;
+  margin-bottom: 20px;
+}
+
+.section-content {
+  max-width: 800px;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+/* ===== ACCORDION ===== */
+
+.section-accordion {
+  border-top: 1px solid #111;
+  transition: background 0.2s ease;
+}
+
+.section-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #fff;
+  font-family: Imagine, Tahoma, sans-serif;
+  font-size: 16px;
+
+  padding: 26px 60px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  cursor: pointer;
+  text-align: left;
+
+  transition: background 0.2s ease;
+}
+
+.section-toggle:hover {
+  background: rgba(255,59,59,0.08);
+}
+
+.section-toggle h2 {
+  color: #ff3b3b;
+}
+
+.arrow {
+  color: #ff3b3b;
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.section-accordion.open .arrow {
+  transform: rotate(180deg);
+}
+
+/* ===== COLLAPSIBLE BODY ===== */
+
+.section-body {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.45s ease, padding 0.3s ease;
+  padding: 0 60px;
+}
+
+.section-accordion.open .section-body {
+  max-height: 2000px;
+  padding: 0 60px 50px;
+}
+
+/* ===== DRAW TOOL ===== */
 
 .draw-container {
   max-width: 1000px;
@@ -24,14 +98,16 @@
   background: #111;
   border-radius: 16px;
   padding: 20px;
+  border: 1px solid #222;
   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
-/* Toolbar */
+/* toolbar */
+
 .toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 18px;
   align-items: center;
   margin-bottom: 20px;
 }
@@ -43,53 +119,64 @@
 }
 
 .tool-group label {
-  font-size: 14px;
+  font-size: 13px;
   opacity: 0.7;
 }
 
-/* Brush preview */
+/* brush preview */
+
 #brushPreview {
   border-radius: 50%;
   background: black;
 }
 
-/* Buttons */
+/* buttons */
+
 .tool-btn {
   padding: 8px 14px;
-  border: none;
   border-radius: 8px;
-  background: #222;
-  color: white;
+  border: 1px solid #222;
+
+  background: #181818;
+  color: #fff;
+
   cursor: pointer;
-  transition: 0.2s;
+
+  transition: 
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
 }
 
 .tool-btn:hover {
-  background: #333;
+  background: #222;
+  border-color: #ff3b3b;
 }
 
 .tool-btn.primary {
-  background: #2979ff;
+  background: #ff3b3b;
+  border-color: #ff3b3b;
 }
 
 .tool-btn.primary:hover {
-  background: #1565c0;
+  background: #ff0000;
 }
 
 .tool-btn.danger {
-  background: #b71c1c;
+  background: #7f0000;
+  border-color: #7f0000;
 }
 
 .tool-btn.danger:hover {
-  background: #7f0000;
+  background: #b00000;
 }
 
-/* Active eraser state */
 .tool-btn.active {
   background: #ff9800;
 }
 
-/* Canvas */
+/* ===== CANVAS ===== */
+
 .canvas-wrapper {
   position: relative;
   display: flex;
@@ -99,11 +186,12 @@
 canvas {
   background: white;
   border-radius: 12px;
-  cursor: none;
   width: 100%;
+  max-width: 900px;
 }
 
-/* Cursor preview */
+/* ===== CURSOR PREVIEW ===== */
+
 #cursorPreview {
   position: fixed;
   border: 1px solid white;
@@ -112,129 +200,33 @@ canvas {
   transform: translate(-50%, -50%);
   display: none;
 }
-input {
-  width: 70%;
-  padding: 10px;
-  background: #111;
-  border: 2px solid #ff0000;
-  color: #fff;
-  font-family: Imagine, Tahoma, sans-serif;
-}
 
-input:focus {
-  outline: none;
-  border-color: #ff3b3b;
-}
+/* ===== INPUTS ===== */
 
-/* ===== ACCORDION SECTIONS ===== */
-
-.section-accordion {
-  border-top: 1px solid #111;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideUp 0.8s ease forwards;
-}
-
-.section-accordion:nth-of-type(1) { animation-delay: 0.2s; }
-.section-accordion:nth-of-type(2) { animation-delay: 0.4s; }
-.section-accordion:nth-of-type(3) { animation-delay: 0.6s; }
-.section-accordion:nth-of-type(4) { animation-delay: 0.8s; }
-.section-accordion:nth-of-type(5) { animation-delay: 1.0s; }
-.section-accordion:nth-of-type(6) { animation-delay: 1.2s; }
-
-@keyframes slideUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* The toggle button acting as the section header */
-.section-toggle {
-  width: 100%;
-  background: none;
-  border: none;
-  color: #fff;
-  font-family: Imagine, Tahoma, sans-serif;
-  font-size: 1em;
-  padding: 28px 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+input[type="range"],
+input[type="color"] {
   cursor: pointer;
-  text-align: left;
-  transition: background 0.2s ease;
 }
 
-.section-toggle:hover {
-  background: rgba(255, 59, 59, 0.07);
-}
+/* ===== GAME FRAME ===== */
 
-.section-toggle h2 {
-  color: #ff3b3b;
-  pointer-events: none;
+iframe {
+  border-radius: 10px;
 }
-
-.section-toggle .arrow {
-  font-size: 18px;
-  color: #ff3b3b;
-  transition: transform 0.3s ease;
-  pointer-events: none;
-  flex-shrink: 0;
-}
-
-.section-accordion.open .section-toggle .arrow {
-  transform: rotate(180deg);
-}
-
-/* Collapsible body */
-.section-body {
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.4s ease, padding 0.3s ease;
-  padding: 0 60px;
-}
-
-.section-accordion.open .section-body {
-  max-height: 2000px;
-  padding: 0 60px 60px;
-}
-
-.section-content {
-  max-width: 800px;
-  line-height: 1.6;
-  opacity: 0.85;
-}
-
-/* Top intro section stays always visible */
-section#top {
-  padding: 80px 60px;
-  border-top: 1px solid #111;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideUp 0.8s ease forwards;
-  animation-delay: 0.2s;
-}
-
-section#top h2 {
-  color: #ff3b3b;
-  margin-bottom: 20px;
-}
-
 </style>
 </head>
 
 <body>
 
 <nav>
-  <a href="https://sutee124.github.io" class="logo">
-    <img src="/assets/site/logo.png" alt="Sutee">
+  <a href="index.html" class="nav-logo">
+    <img src="/assets/site/logo.png" alt="Sutee" onerror="this.style.display='none';this.parentElement.textContent='sutee.'">
   </a>
   <ul>
-    <li><a href="sutee124.github.io#about">About</a></li>
+    <li><a href="#about">About</a></li>
     <li><a href="downloads">Downloads</a></li>
-    <li><a href="sutee124.github.io#projects">Projects</a></li>
-    <li><a href="sutee124.github.io#contact">Contact</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
 
@@ -332,7 +324,7 @@ Here are some random fun stuffs you can do on my site. Everything is random here
 </div>
 
 <footer>
-  © 2026 sutee124.
+  <span class="footer-copy">© 2026 sutee124</span>
 </footer>
 
 <script>
