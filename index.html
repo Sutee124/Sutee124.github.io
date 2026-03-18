@@ -12,6 +12,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site/style.css">
 
+<style>
+  .btn-icon {
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0 8px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+}
+.btn-icon:hover { opacity: 1; }
+</style>
+
 </head>
 <body>
 
@@ -89,17 +102,24 @@
     </div>
   </div>
 
-  <!-- the part that sends me annoying questions -->
-  <div class="ama-box reveal">
-    <div class="ama-title">Ask Me Anything</div>
-    <div class="ama-sub">Beta — Anonymous questions</div>
-    <div class="ama-row">
-      <input type="text" class="ama-input" id="questionInput" placeholder="Type your question here...">
-      <button class="btn" onclick="submitQuestion()">Send →</button>
-    </div>
-    <p class="ama-msg" id="responseMessage"></p>
+<!-- the part that sends me annoying questions -->
+<div class="ama-box reveal">
+  <div class="ama-title">Ask Me Anything</div>
+  <div class="ama-sub">Beta — Anonymous questions</div>
+  <div class="ama-row">
+    <input type="text" class="ama-input" id="questionInput" placeholder="Type your question here...">
+    <label class="btn-icon" title="Attach image">
+      📎
+      <input type="file" id="imageInput" accept="image/*" style="display:none">
+    </label>
+    <button class="btn" onclick="submitQuestion()">Send →</button>
   </div>
-</section>
+  <div id="imagePreview" style="display:none; margin-top:8px;">
+    <img id="previewImg" style="max-height:80px; border-radius:6px; opacity:0.85;">
+    <button onclick="clearImage()" style="margin-left:6px; background:none; border:none; cursor:pointer; opacity:0.6;">✕</button>
+  </div>
+  <p class="ama-msg" id="responseMessage"></p>
+</div>
 
 <section class="section reveal" id="projects">
   <div class="section-label">Projects</div>
@@ -167,21 +187,67 @@ fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
   .catch(console.error);
 
 /* ── AMA ── */
+document.getElementById("imageInput").addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
+  const preview = document.getElementById("imagePreview");
+  const img = document.getElementById("previewImg");
+  img.src = URL.createObjectURL(file);
+  preview.style.display = "flex";
+  preview.style.alignItems = "center";
+});
+
+function clearImage() {
+  document.getElementById("imageInput").value = "";
+  document.getElementById("imagePreview").style.display = "none";
+  document.getElementById("previewImg").src = "";
+}
+
 async function submitQuestion() {
   const input = document.getElementById("questionInput");
   const msg = document.getElementById("responseMessage");
+  const imageInput = document.getElementById("imageInput");
   const question = input.value.trim();
-  if (!question) { msg.textContent = "Please type something."; return; }
+
+  if (!question && !imageInput.files[0]) {
+    msg.textContent = "Please type something.";
+    return;
+  }
+
   msg.textContent = "Sending...";
+
   try {
+    let body;
+    let headers = {};
+
+    if (imageInput.files[0]) {
+      // Send as multipart form when image is attached
+      const formData = new FormData();
+      formData.append("question", question);
+      formData.append("image", imageInput.files[0]);
+      body = formData;
+      // Don't set Content-Type — browser sets it with boundary automatically
+    } else {
+      headers["Content-Type"] = "application/json";
+      body = JSON.stringify({ question });
+    }
+
     const res = await fetch("https://ama.site124.workers.dev", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question })
+      headers,
+      body
     });
-    if (res.ok) { msg.textContent = "Question sent anonymously!"; input.value = ""; }
-    else { msg.textContent = "Something went wrong."; }
-  } catch { msg.textContent = "Error sending question."; }
+
+    if (res.ok) {
+      msg.textContent = "Question sent anonymously!";
+      input.value = "";
+      clearImage();
+    } else {
+      msg.textContent = "Something went wrong.";
+    }
+  } catch {
+    msg.textContent = "Error sending question.";
+  }
 }
 
 document.getElementById("questionInput").addEventListener("keydown", e => {
