@@ -124,39 +124,24 @@
     </div>
   </div>
 
-<!-- WHY DISABLED MODAL -->
-<div id="whyModal" style="display:none; position:fixed; inset:0; z-index:999; background:rgba(0,0,0,0.75); backdrop-filter:blur(4px); align-items:center; justify-content:center;">
-  <div style="background:var(--surface2,#1a1a1a); border:1px solid rgba(255,255,255,0.1); border-radius:12px; max-width:420px; width:90%; padding:28px; position:relative; text-align:center;">
-    <button onclick="document.getElementById('whyModal').style.display='none'" style="position:absolute; top:12px; right:14px; background:none; border:none; color:var(--muted,#888); font-size:18px; cursor:pointer; line-height:1;">✕</button>
-    <p style="margin:0 0 16px; color:var(--text,#eee); font-family:inherit; font-size:0.95rem; line-height:1.6;">Yall I have to disable this because what the fuck is this 🥀💔</p>
-    <a href="/assets/media/IMG_0202.PNG" target="_blank" title="Click to view full image">
-      <img src="/assets/media/IMG_0202.PNG" alt="why image upload is disabled" style="width:auto; height:320px; aspect-ratio:9/19.5; object-fit:cover; border-radius:8px; opacity:0.9; cursor:zoom-in; transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.9'">
-    </a>
-  </div>
-</div>
-
 <!-- the part that sends me annoying questions -->
 <div class="ama-box reveal">
   <div class="ama-title">Ask Me Anything</div>
-  <div class="ama-sub">Beta — Anonymous questions &nbsp;·&nbsp; <span onclick="document.getElementById('whyModal').style.display='flex'" style="cursor:pointer; text-decoration:underline; text-underline-offset:3px; opacity:0.7;">why is image upload disabled?</span></div>
+  <div class="ama-sub">Beta — Anonymous questions</div>
   <div class="ama-row">
     <input type="text" class="ama-input" id="questionInput" placeholder="Type your question here...">
-      <!-- IMAGE ATTACH TEMPORARILY DISABLED
       <label class="btn-icon" title="Attach image">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
         </svg>
         <input type="file" id="imageInput" accept="image/*" style="display:none">
       </label>
-      -->
     <button class="btn" onclick="submitQuestion()">Send →</button>
   </div>
-  <!-- IMAGE PREVIEW TEMPORARILY DISABLED
   <div id="imagePreview" style="display:none; margin-top:8px;">
     <img id="previewImg" style="max-height:80px; border-radius:6px; opacity:0.85;">
     <button onclick="clearImage()" style="margin-left:6px; background:none; border:none; cursor:pointer; color:white;">✕</button>
   </div>
-  -->
   <p class="ama-msg" id="responseMessage"></p>
 </div>
 
@@ -170,7 +155,7 @@
   <div class="contact-inner">
     <div class="contact-head">Have something to say?</div>
     <div class="contact-btns">
-      <a href="/cdn-cgi/l/email-protection#25565051404014171114654a5051494a4a4e0b464a48" class="btn">→ Email</a>
+      <a href="mailto:sutee1241@outlook.com" class="btn">→ Email</a>
       <a href="https://www.reddit.com/u/Sutee124" target="_blank" class="btn btn-ghost">→ Reddit</a>
     </div>
   </div>
@@ -181,7 +166,7 @@
   <span class="footer-copy">© 2026 sutee124</span>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ── PROJECTS ── */
 const username = "Sutee124";
 const repoContainer = document.getElementById("repo-list");
@@ -226,31 +211,29 @@ fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
   .catch(console.error);
 
 /* ── AMA ── */
-// IMAGE ATTACH TEMPORARILY DISABLED
-// document.getElementById("imageInput").addEventListener("change", function () {
-//   const file = this.files[0];
-//   if (!file) return;
-//   const preview = document.getElementById("imagePreview");
-//   const img = document.getElementById("previewImg");
-//   img.src = URL.createObjectURL(file);
-//   preview.style.display = "flex";
-//   preview.style.alignItems = "center";
-// });
+document.getElementById("imageInput").addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
+  const preview = document.getElementById("imagePreview");
+  const img = document.getElementById("previewImg");
+  img.src = URL.createObjectURL(file);
+  preview.style.display = "flex";
+  preview.style.alignItems = "center";
+});
 
-// IMAGE ATTACH TEMPORARILY DISABLED
-// function clearImage() {
-//   document.getElementById("imageInput").value = "";
-//   document.getElementById("imagePreview").style.display = "none";
-//   document.getElementById("previewImg").src = "";
-// }
+function clearImage() {
+  document.getElementById("imageInput").value = "";
+  document.getElementById("imagePreview").style.display = "none";
+  document.getElementById("previewImg").src = "";
+}
 
 async function submitQuestion() {
   const input = document.getElementById("questionInput");
   const msg = document.getElementById("responseMessage");
-  // IMAGE ATTACH TEMPORARILY DISABLED: const imageInput = document.getElementById("imageInput");
+  const imageInput = document.getElementById("imageInput");
   const question = input.value.trim();
 
-  if (!question) {
+  if (!question && !imageInput.files[0]) {
     msg.textContent = "Please type something.";
     return;
   }
@@ -258,17 +241,31 @@ async function submitQuestion() {
   msg.textContent = "Sending...";
 
   try {
-    // IMAGE ATTACH TEMPORARILY DISABLED: always send as JSON (no image support)
+    let body;
+    let headers = {};
+
+    if (imageInput.files[0]) {
+      // Send as multipart form when image is attached
+      const formData = new FormData();
+      formData.append("question", question);
+      formData.append("image", imageInput.files[0]);
+      body = formData;
+      // Don't set Content-Type — browser sets it with boundary automatically
+    } else {
+      headers["Content-Type"] = "application/json";
+      body = JSON.stringify({ question });
+    }
+
     const res = await fetch("https://ama.site124.workers.dev", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question })
+      headers,
+      body
     });
 
     if (res.ok) {
       msg.textContent = "Question sent anonymously!";
       input.value = "";
-      // IMAGE ATTACH TEMPORARILY DISABLED: clearImage();
+      clearImage();
     } else {
       msg.textContent = "Something went wrong.";
     }
