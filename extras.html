@@ -8,14 +8,14 @@
 
 <link rel="stylesheet" href="/assets/site/style.css">
 </head>
-<body>
+<body class="site-page">
 
 <!-- NAV (untouched) -->
-<nav>
-  <a href="index.html">
+<nav class="site-nav">
+  <a class="site-logo" href="index.html">
     <img src="/assets/site/logo.png" alt="Sutee" onerror="this.hidden=true;this.parentElement.textContent='sutee.'">
   </a>
-  <ul>
+  <ul class="nav-links">
     <li><a href="index#about">About</a></li>
     <li><a href="downloads">Downloads</a></li>
     <li><a href="index#projects">Projects</a></li>
@@ -31,9 +31,9 @@
     <p>Random fun stuff you can do on my site. No theme, no coherent plan.</p>
     <p>Came from my old StrawPage looking for the canvas? It's still here.</p>
     <div>
-      <button onclick="openAndScroll('acc-player')">♪ Music Zone</button>
-      <button onclick="openAndScroll('acc-clouds')">☁ Clouds Minigame</button>
-      <button onclick="openAndScroll('acc-draw')">✏ Draw Something</button>
+      <button class="button" onclick="openAndScroll('acc-player')">♪ Music Zone</button>
+      <button class="button" onclick="openAndScroll('acc-clouds')">☁ Clouds Minigame</button>
+      <button class="button" onclick="openAndScroll('acc-draw')">✏ Draw Something</button>
     </div>
   </div>
 </div>
@@ -42,8 +42,8 @@
 <div>
 
   <!-- MUSIC ZONE -->
-  <div id="acc-player">
-    <button onclick="toggleSection('acc-player')" aria-expanded="false">
+  <div class="extra-section" id="acc-player">
+    <button class="button section-toggle" onclick="toggleSection('acc-player')" aria-expanded="false">
       <div>
         <span>01</span>
         <span>Music Zone</span>
@@ -61,8 +61,8 @@
   </div>
 
   <!-- CLOUDS MINIGAME -->
-  <div id="acc-clouds">
-    <button onclick="toggleSection('acc-clouds')" aria-expanded="false">
+  <div class="extra-section" id="acc-clouds">
+    <button class="button section-toggle" onclick="toggleSection('acc-clouds')" aria-expanded="false">
       <div>
         <span>02</span>
         <span>Clouds Minigame</span>
@@ -87,8 +87,8 @@
   </div>
 
   <!-- DRAW SOMETHING -->
-  <div id="acc-draw">
-    <button onclick="toggleSection('acc-draw')" aria-expanded="false">
+  <div class="extra-section" id="acc-draw">
+    <button class="button section-toggle" onclick="toggleSection('acc-draw')" aria-expanded="false">
       <div>
         <span>03</span>
         <span>Draw Something</span>
@@ -112,11 +112,11 @@
               <div id="brushPreview"></div>
             </div>
             <div>
-              <button id="eraserBtn" onclick="toggleEraser()">Eraser</button>
-              <button onclick="undo()">Undo</button>
-              <button onclick="redo()">Redo</button>
-              <button onclick="clearCanvas()">Clear</button>
-              <button onclick="saveDrawing()">Save PNG</button>
+              <button class="button" id="eraserBtn" onclick="toggleEraser()">Eraser</button>
+              <button class="button" onclick="undo()">Undo</button>
+              <button class="button" onclick="redo()">Redo</button>
+              <button class="button" onclick="clearCanvas()">Clear</button>
+              <button class="button" onclick="saveDrawing()">Save PNG</button>
             </div>
           </div>
 
@@ -132,7 +132,7 @@
 </div>
 
 <!-- FOOTER (untouched) -->
-<footer>
+<footer class="site-footer">
   <span>© 2026 sutee124</span>
 </footer>
 

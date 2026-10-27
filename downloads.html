@@ -9,14 +9,14 @@
 <!--style stuff-->
 <link rel="stylesheet" href="/assets/site/style.css">
 </head>
-<body>
+<body class="site-page">
 
 <!-- ── NAV (untouched) ── -->
-<nav>
-  <a href="index.html">
+<nav class="site-nav">
+  <a class="site-logo" href="index.html">
     <img src="/assets/site/logo.png" alt="Sutee" onerror="this.hidden=true;this.parentElement.textContent='sutee.'">
   </a>
-  <ul>
+  <ul class="nav-links">
     <li><a href="index#about">About</a></li>
     <li><a href="downloads">Downloads</a></li>
     <li><a href="index#projects">Projects</a></li>
@@ -35,14 +35,14 @@
 </div>
 
 <!-- ── DOWNLOADS SECTION ── -->
-<section id="downloads">
+<section class="page-section" id="downloads">
 
   <!-- Search bar (outside grid) -->
   <div>
     <span>Filter</span>
     <div>
       <input type="text" id="searchInput" placeholder="Search apps...">
-      <button id="clearBtn" aria-label="Clear search">&times;</button>
+      <button class="button" id="clearBtn" aria-label="Clear search">&times;</button>
     </div>
     <span id="resultCount"></span>
   </div>
@@ -50,9 +50,9 @@
   <p id="noResults">// no results found.</p>
 
   <!-- Grid -->
-  <div id="downloadsGrid">
+  <div class="card-list" id="downloadsGrid">
 
-    <div>
+    <div class="card">
       <div>01</div>
       <h3>Everything</h3>
       <h4>By <a href="https://www.voidtools.com/" target="_blank">VoidTools</a> &mdash; v1.3.4</h4>
@@ -60,7 +60,7 @@
       <a href="/apps/Everything.exe">Download</a>
     </div>
 
-    <div>
+    <div class="card">
       <div>02</div>
       <h3>Unstoppable Copier</h3>
       <h4>By <a href="https://www.roadkil.net/" target="_blank">Roadkil</a> &mdash; v5.2.0</h4>
@@ -68,7 +68,7 @@
       <a href="/apps/UnstoppableCopier.exe">Download</a>
     </div>
 
-    <div>
+    <div class="card">
       <div>03</div>
       <h3>AnyDesk</h3>
       <h4>By <a href="https://anydesk.com/" target="_blank">AnyDesk Software GmbH</a> &mdash; v9.5.6</h4>
@@ -76,7 +76,7 @@
       <a href="/apps/AnyDesk.exe">Download</a>
     </div>
 
-    <div>
+    <div class="card">
       <div>04</div>
       <h3>GPU-Z</h3>
       <h4>By <a href="https://www.techpowerup.com/" target="_blank">TechPowerUp</a> &mdash; v2.57.0</h4>
@@ -84,7 +84,7 @@
       <a href="/apps/GPU-Z.exe">Download</a>
     </div>
 
-    <div>
+    <div class="card">
       <div>05</div>
       <h3>CPU-Z</h3>
       <h4>By <a href="https://www.cpuid.com/" target="_blank">CPUID</a> &mdash; v2.09.0</h4>
@@ -92,7 +92,7 @@
       <a href="/apps/cpuz.exe">Download</a>
     </div>
 
-    <div>
+    <div class="card">
       <div>06</div>
       <h3>Windhawk</h3>
       <h4>By <a href="https://ramensoftware.com/" target="_blank">Ramen Software</a> &mdash; v1.6.0</h4>
@@ -100,7 +100,7 @@
       <a href="/apps/windhawk_setup.exe">Download</a>
     </div>
 
-    <div>
+    <div class="card">
       <div>07</div>
       <h3>Stupid Boiled Egg</h3>
       <h4>By <a href="https://guthib.com/" target="_blank">Hard-Boiled Egg Industries, ltd.</a> &mdash; v9.9.9</h4>
@@ -112,7 +112,7 @@
 </section>
 
 <!-- ── FOOTER (untouched) ── -->
-<footer>
+<footer class="site-footer">
   <span>© 2026 sutee124</span>
 </footer>
 

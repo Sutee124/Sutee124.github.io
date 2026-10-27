@@ -12,7 +12,7 @@
 }
 
 /* Page */
-body {
+.site-page {
   max-width: var(--page-width);
   margin: 0 auto;
   padding: 24px;
@@ -37,17 +37,17 @@ a:hover {
 }
 
 /* Navigation and sections */
-nav {
+.site-nav {
   margin-bottom: 32px;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--border);
 }
 
-nav img {
+.site-logo img {
   width: 120px;
 }
 
-nav ul {
+.nav-links {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
@@ -55,11 +55,11 @@ nav ul {
   list-style: none;
 }
 
-section, footer {
+.page-section, .site-footer {
   margin-top: 32px;
 }
 
-footer {
+.site-footer {
   padding-top: 16px;
   border-top: 1px solid var(--border);
 }
@@ -90,7 +90,7 @@ button, input, select, textarea {
   font: inherit;
 }
 
-button {
+.button {
   padding: 6px 12px;
   cursor: pointer;
 }
@@ -105,12 +105,12 @@ input[type="text"], textarea {
   outline-offset: 3px;
 }
 
-/* Existing IDs: no class names needed */
-#repo-list > div, #downloadsGrid > div {
+/* Reusable content blocks */
+.card {
   margin: 24px 0;
 }
 
-#previewImg {
+.image-preview {
   max-height: 120px;
   width: auto;
 }
@@ -119,3 +119,21 @@ input[type="text"], textarea {
 [hidden] {
   display: none !important;
 }
+
+/* Add your own styles to these blocks later. */
+.page-intro {
+  margin-bottom: 32px;
+}
+
+.extra-section {
+  margin-top: 24px;
+}
+
+.section-toggle {
+  text-align: left;
+}
+
+/* Optional starting points:
+.card-list { }
+.music-player { }
+*/
