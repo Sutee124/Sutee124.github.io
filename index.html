@@ -7,15 +7,16 @@
 <link rel="icon" type="image/png+xml" href="/assets/site/favicon.png">
 
 <!--style stuff-->
+<link rel="stylesheet" href="/assets/site/style.css">
 </head>
-<body>
+<body class="site-page">
 
 <!-- nav -->
-<nav>
-  <a href="index.html">
+<nav class="site-nav">
+  <a class="site-logo" href="index.html">
     <img src="/assets/site/logo.png" alt="Sutee" onerror="this.hidden=true;this.parentElement.textContent='sutee.'">
   </a>
-  <ul>
+  <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="downloads">Downloads</a></li>
     <li><a href="#projects">Projects</a></li>
@@ -23,7 +24,7 @@
   </ul>
 </nav>
 
-<div>
+<div class="page-intro">
   <div></div>
   <div></div>
   <span>EST. 2024 — SUTEE124</span>
@@ -53,7 +54,7 @@
   </div>
 </div>
 
-<section id="about">
+<section class="page-section" id="about">
   <div>About me</div>
   <div>
     <div>
@@ -96,23 +97,23 @@
         </svg>
         <input type="file" id="imageInput" accept="image/*">
       </label>
-    <button onclick="submitQuestion()">Send →</button>
+    <button class="button" onclick="submitQuestion()">Send →</button>
   </div>
   <div id="imagePreview" hidden>
-    <img id="previewImg">
-    <button onclick="clearImage()">✕</button>
+    <img class="image-preview" id="previewImg">
+    <button class="button" onclick="clearImage()">✕</button>
   </div>
   <p id="responseMessage"></p>
 </div>
 
 </section>
 
-<section id="projects">
+<section class="page-section" id="projects">
   <div>Projects</div>
-  <div id="repo-list"></div>
+  <div class="card-list" id="repo-list"></div>
 </section>
 
-<section id="contact">
+<section class="page-section" id="contact">
   <div>Contact</div>
   <div>
     <div>Have something to say?</div>
@@ -124,7 +125,7 @@
 </section>
 
 <!-- FOOTER -->
-<footer>
+<footer class="site-footer">
   <span>© 2026 sutee124</span>
 </footer>
 
@@ -151,6 +152,7 @@ let cardCount = 0;
 function makeCard(name, desc, url, isGithub) {
   cardCount++;
   const card = document.createElement("div");
+  card.className = "card";
   card.innerHTML = `
     <div>${String(cardCount).padStart(2, '0')}</div>
     <h3>${name}</h3>
